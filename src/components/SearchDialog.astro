@@ -1,0 +1,12 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="search-dialog" class="search-dialog" aria-labelledby="search-title">
+  <div class="dialog-head"><span id="search-title">搜索笔记</span><button class="icon-button" data-close aria-label="关闭搜索"><Icon name="close"/></button></div>
+  <div class="dialog-content">
+    <div class="search-field"><Icon name="search"/><input id="search-input" type="search" aria-label="搜索关键词" placeholder="试试「Redis」或「反向传播」" autocomplete="off"/></div>
+    <p class="search-hint" id="search-count" aria-live="polite">输入关键词，搜索标题、标签和正文。</p>
+    <div id="search-results"></div>
+    <div class="search-footer"><span>从一个问题，开始探索。</span><span><kbd>Esc</kbd> 关闭</span></div>
+  </div>
+</dialog>

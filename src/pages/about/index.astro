@@ -1,0 +1,9 @@
+---
+import Base from '../../layouts/Base.astro';
+import Profile from '../../components/Profile.astro';
+import Icon from '../../components/Icon.astro';
+---
+<Base title="关于 onlylo" description="onlylo 的个人空间。only live once，写一点笔记，做一点东西。">
+<section class="page-heading"><div><p class="eyebrow">很高兴，在这里遇见你</p><h1>关于我与这个小站</h1><p>only live once.</p></div></section>
+<div class="about-grid"><div class="about-copy card"><h2>你好，我是 onlylo。</h2><p>这里是我的个人博客，放一些学习笔记、项目实践，以及探索过程中的记录。</p><p>从神经网络的原理，到 Vue、Spring Boot 和后端项目开发，我想把学过的东西整理下来。既方便以后回看，也希望能和有相同兴趣的人交换思路。</p><h3>这里会慢慢留下什么</h3><div class="about-topics"><a href="/notes/?category=web"><Icon name="code"/><strong>开发与实践</strong><span>从一个知识点，到一个项目</span></a><a href="/notes/?category=ai"><Icon name="network"/><strong>深度学习</strong><span>理解原理，也尝试实现</span></a></div><h3>关于笔记</h3><p>部分文章整理自课程与学习资料，会保留来源线索及自己的批注。内容反映学习时的理解，未完成的章节也会如实保留。</p><a class="primary-link" href="https://github.com/wm2103" target="_blank" rel="noopener noreferrer">在 GitHub 遇见 <Icon name="arrow"/></a></div><aside class="sidebar"><Profile/><section class="side-card card"><h2 style="font-size:15px">关于设计</h2><p style="color:var(--muted);line-height:1.9;margin-top:12px">首页布局参考 <a href="https://blog.zhheo.com/" target="_blank" rel="noopener noreferrer">张洪 Heo</a> 与 <a href="https://blog.anheyu.com/" target="_blank" rel="noopener noreferrer">安知鱼 / 安和鱼</a>，封面图形与页面组件为本站制作。</p></section></aside></div>
+</Base>

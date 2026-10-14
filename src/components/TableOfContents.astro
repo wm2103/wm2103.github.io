@@ -1,0 +1,8 @@
+---
+interface Props { headings: { depth: number; slug: string; text: string }[]; mobile?: boolean; }
+const { headings, mobile = false } = Astro.props;
+const entries = headings.filter(h => h.depth <= 3);
+---
+<nav class:list={['toc', { 'toc-mobile': mobile }]} aria-label={mobile ? '移动端文章目录' : '文章目录'}>
+  <ol>{entries.map(heading => <li class={'depth-' + heading.depth}><a href={'#' + heading.slug}>{heading.text}</a></li>)}</ol>
+</nav>

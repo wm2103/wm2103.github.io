@@ -1,0 +1,29 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import { allNotes, seriesNotes, noteUrl, dateLabel, readingMinutes, categoryNames } from '../../lib/notes';
+export async function getStaticPaths() { return (await allNotes()).map(note => ({ params: { slug: note.id }, props: { note } })); }
+const { note } = Astro.props;
+const { Content, headings } = await render(note);
+const related = note.data.series ? await seriesNotes() : (await allNotes()).filter(n => !n.data.series);
+const index = related.findIndex(n => n.id === note.id);
+const prev = related[index - 1], next = related[index + 1];
+---
+<Base title={note.data.title} description={note.data.description} article>
+<div class="reading-progress" aria-hidden="true"><span id="reading-progress"/></div>
+<div class="breadcrumbs"><a href="/">首页</a><span>/</span><a href="/notes/">笔记</a><span>/</span><span>{categoryNames[note.data.category]}</span></div>
+<div class="article-layout">
+<article class="article-card card">
+  <header class="article-header"><div class="article-kicker">{note.data.series && <a href="/series/sky-takeout/">苍穹外卖 · Day {String(note.data.seriesOrder).padStart(2,'0')}</a>}<span>{categoryNames[note.data.category]}</span></div><h1>{note.data.title}</h1><p class="article-lede">{note.data.description}</p><div class="article-meta"><span>onlylo</span><span>{dateLabel(note)}</span><span>约 {readingMinutes(note)} 分钟</span></div><div class="article-tags">{note.data.tags.map(tag => <a href={'/notes/?tag=' + encodeURIComponent(tag)}># {tag}</a>)}</div></header>
+  {note.data.sourceLabel && <div class="source-note-article"><Icon name="book"/><span>{note.data.sourceLabel}</span></div>}
+  <details class="mobile-toc"><summary>本篇目录 <span>{headings.filter(h=>h.depth<=3).length} 个章节</span></summary><TableOfContents headings={headings} mobile/></details>
+  <div class="prose" id="article-body"><Content/></div>
+  <div class="article-end"><strong>记录，是为了更好地继续。</strong><p>学习笔记中的代码与结论保留当时的上下文，欢迎结合原文资料继续探索。</p><a href="/notes/">← 返回全部笔记</a></div>
+  {(prev || next) && <nav class="article-pagination" aria-label={note.data.series ? '系列前后篇' : '前后篇笔记'}>{prev ? <a href={noteUrl(prev)}><small>← {note.data.series ? '系列上一篇' : '上一篇'}</small><strong>{prev.data.title}</strong></a> : <span/>}{next && <a href={noteUrl(next)}><small>{note.data.series ? '系列下一篇' : '下一篇'} →</small><strong>{next.data.title}</strong></a>}</nav>}
+</article>
+<aside class="article-aside"><div class="card toc-card"><div class="side-heading"><h2><Icon name="book"/>本篇目录</h2><span id="reading-percent">0%</span></div><TableOfContents headings={headings}/></div>{note.data.series && <div class="card series-toc"><h2>苍穹外卖学习系列</h2>{related.map(n => <a class:list={{current:n.id===note.id}} href={noteUrl(n)} aria-current={n.id===note.id?'page':undefined}><span>{String(n.data.seriesOrder).padStart(2,'0')}</span>{n.data.title.replace(/^苍穹外卖\s*[·｜|：:]?\s*Day\s*\d+\s*[·｜|：:—-]?\s*/i,'')}</a>)}<a class="series-all" href="/series/sky-takeout/">查看系列介绍 →</a></div>}</aside>
+</div>
+<script>import '../../scripts/article';</script>
+</Base>

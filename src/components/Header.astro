@@ -1,0 +1,16 @@
+---
+import Icon from './Icon.astro';
+const path = Astro.url.pathname;
+const links = [{url:'/',label:'首页'}, {url:'/notes/',label:'笔记'}, {url:'/projects/',label:'项目'}, {url:'/about/',label:'关于'}];
+---
+<header class="site-header">
+  <a class="brand" href="/" aria-label="onlylo 首页"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>onlylo<span style="color:var(--primary);margin-left:-8px">.</span></a>
+  <nav class="nav" aria-label="主导航">{links.map(link => <a class:list={{active: link.url === '/' ? path === '/' : path.startsWith(link.url)}} href={link.url} aria-current={path === link.url ? 'page' : undefined}>{link.label}</a>)}</nav>
+  <div class="header-actions">
+    <button class="icon-button" data-search aria-label="搜索笔记" title="搜索（Ctrl / ⌘ K）"><Icon name="search"/></button>
+    <button class="icon-button" id="theme-toggle" aria-label="切换到深色模式"><Icon name="moon" class="moon"/><Icon name="sun" class="sun"/></button>
+    <a class="icon-button" href="https://github.com/wm2103" target="_blank" rel="noopener noreferrer" aria-label="访问 GitHub"><Icon name="github"/></a>
+    <button class="icon-button menu-button" id="menu-toggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="mobile-menu"><Icon name="menu"/></button>
+  </div>
+  <nav class="mobile-nav card" id="mobile-menu" aria-label="移动端导航" hidden>{links.map(link => <a href={link.url}>{link.label}</a>)}<a href="/series/sky-takeout/">苍穹外卖系列</a></nav>
+</header>

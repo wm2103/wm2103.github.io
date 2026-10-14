@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import Icon from '../../components/Icon.astro';
+import { seriesNotes, noteUrl, readingMinutes } from '../../lib/notes';
+export function getStaticPaths() { return [{ params: { slug: 'sky-takeout' } }]; }
+const notes = await seriesNotes();
+---
+<Base title="苍穹外卖学习系列" description="苍穹外卖项目学习笔记，从环境搭建、员工与菜品管理，到 Redis、微信登录和购物车。">
+<section class="series-hero card"><span class="eyebrow">JAVA · SPRING BOOT · REDIS</span><h1>苍穹外卖<br/><span>把知识放进一个项目。</span></h1><p>跟着课程记录开发过程，也留下自己的理解与疑问。</p><div class="series-meta"><span>{notes.length} 篇笔记</span><span>按学习顺序阅读</span><span>整理于 2026-10-14</span></div></section>
+<div class="content-layout"><div class="main-column">
+<div class="series-explanation card"><Icon name="note"/><p>这里收录目前已有的 Day 01、02、03、05、06、07。Day 04 为自行完善功能的练习，没有独立讲义或笔记，因此保留原来的 Day 编号。</p></div>
+<div class="series-list">{notes.map(note=><a href={noteUrl(note)} class="series-entry card"><span class="series-number">{String(note.data.seriesOrder).padStart(2,'0')}</span><div><h2>{note.data.title}</h2><p>{note.data.description}</p><small>{note.data.tags.join(' / ')} · 约 {readingMinutes(note)} 分钟</small></div><Icon name="arrow"/></a>)}</div>
+</div><Sidebar/></div>
+</Base>

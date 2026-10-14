@@ -1,0 +1,13 @@
+---
+export function getStaticPaths() {
+  return [
+    {params:{legacy:'2024/04/10/神经网络'},props:{destination:'/notes/neural-network/'}},
+    {params:{legacy:'2024/04/27/vue springboot 黑马'},props:{destination:'/notes/vue-spring-boot/'}},
+    {params:{legacy:'archives'},props:{destination:'/notes/'}},
+    {params:{legacy:'categories'},props:{destination:'/notes/'}},
+    {params:{legacy:'tags'},props:{destination:'/notes/'}},
+  ];
+}
+const {destination}=Astro.props;
+---
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta http-equiv="refresh" content={'0;url='+destination}/><link rel="canonical" href={new URL(destination,Astro.site)}/><meta name="robots" content="noindex"/><title>笔记搬到新地址了 · onlylo</title></head><body><p>这篇内容已经搬到新地址。<a href={destination}>继续阅读 →</a></p></body></html>

@@ -1,0 +1,8 @@
+{
+  "result": "passed",
+  "viewport": "390x844",
+  "total_images": 347,
+  "initial_requests": 4,
+  "requests_after_scroll_to_image_81": 52,
+  "method": "remote requests fulfilled with fixed-size SVG for deterministic loading measurement; no claim of remote URL availability"
+}

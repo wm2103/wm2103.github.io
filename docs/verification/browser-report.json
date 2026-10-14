@@ -1,0 +1,21 @@
+{
+  "result": "passed",
+  "viewport_checks": 42,
+  "page_errors": [],
+  "external_images": "requests blocked deliberately to verify fallback",
+  "checks": [
+    "filters",
+    "query parameters",
+    "search title/tags/body",
+    "empty search",
+    "search navigation",
+    "clipboard",
+    "theme persistence",
+    "desktop/mobile TOC",
+    "mobile menu",
+    "series gaps and navigation",
+    "legacy redirects",
+    "404",
+    "responsive layouts"
+  ]
+}

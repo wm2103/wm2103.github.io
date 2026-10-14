@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Sidebar from '../components/Sidebar.astro';
+import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import FilterBar from '../components/FilterBar.astro';
+import Icon from '../components/Icon.astro';
+import { allNotes } from '../lib/notes';
+const notes = await allNotes();
+const seriesCount = notes.filter(note => note.data.series === 'sky-takeout').length;
+---
+<Base>
+  <div class="announcement card"><Icon name="bell"/><strong>近况</strong><span class="line" aria-hidden="true"></span><p>苍穹外卖学习笔记已整理，沿着项目把知识串起来。</p><a href="/series/sky-takeout/"><span>阅读系列</span><Icon name="arrow"/></a></div>
+  <Hero/>
+  <div class="content-layout"><div class="main-column">
+    <a class="series-banner card" href="/series/sky-takeout/"><span class="series-badge"><Icon name="book"/></span><div><strong>苍穹外卖 · 从环境搭建到缓存实践</strong><p>{seriesCount} 篇学习笔记，按 Day 顺序继续探索</p></div><Icon name="arrow"/></a>
+    <section id="content" aria-label="学习笔记"><FilterBar count={notes.length}/><div class="post-grid">{notes.map(note => <PostCard note={note}/>)}</div><p class="filter-empty card" id="filter-empty" hidden>这个分类下暂时没有笔记。</p></section>
+    <section aria-labelledby="projects-title"><div class="section-head"><h2 id="projects-title"><Icon name="grid"/>把想法做出来</h2><a href="/projects/">我的项目 ↗</a></div><ProjectCard/></section><p class="end-note">慢慢积累，持续生长</p>
+  </div><Sidebar/></div>
+</Base>

@@ -1,0 +1,751 @@
+---
+title: vue+springboot 项目入门
+tags:
+- 教程
+categories:
+- 教程
+---
+
+# 学习路径
+
+## 基础篇
+
+1. 配置文件
+2. 整合MyBatis
+3. Bean管理
+4. 自动配置原理
+5. 自定义stater
+## 实战篇
+
+1. 项目开发
+2. 整合第三方技术
+3. 项目部署
+
+# 配置文件
+## .properties
+server.port=9090     来修改端口号
+server.servlet.context.path=/start 	修改虚拟目录
+
+
+## .yml .yaml  更加清爽
+server:
+  port:9191
+  servlet:
+    context
+
+1. 层级表示更清晰
+2. 更关注数据
+
+## yml配置信息书写与获取
+
+1. 三方技术配置信息
+
+只需写配置信息
+
+2. 自定义配置信息
+
+不仅要书写配置信息，还要获取配置信息。
+
+获取配置信息：在java代码中获取
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700747845633-44b77193-22bd-42fa-8d17-018eb6972864.png)
+在Java中使用@Value("${键名}")
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700747974393-77e8ab48-1500-4336-b296-0303ec07c764.png)
+@Value多次注解使用麻烦
+@ConfigurationProprtties(prefix="前缀")
+注解一个类，类中成员要对应
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748216255-087c1123-b89e-4604-8f29-5d2c13a933c7.png#averageHue=%23f9f8f4&clientId=u78d3fea4-c4d8-4&from=paste&height=318&id=uf1dfb539&originHeight=397&originWidth=995&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=159492&status=done&style=none&taskId=uced9854c-0833-43dd-9cc9-176eb9511e9&title=&width=796)
+
+# 整合mybatis
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748358694-80495b1e-3a4b-4e38-9132-06ae1d8048f0.png#averageHue=%23f6f4eb&clientId=u78d3fea4-c4d8-4&from=paste&height=396&id=u964dcd55&originHeight=495&originWidth=1030&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=215174&status=done&style=none&taskId=ub720706a-3612-4382-8de7-aa59b133265&title=&width=824)
+
+1. mybatis的起步依赖
+2. mysql驱动依赖
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748489869-a5376354-5ad5-47a0-bb92-8066e7757d23.png#averageHue=%23f8f4e4&clientId=u78d3fea4-c4d8-4&from=paste&height=187&id=ucc751fcb&originHeight=234&originWidth=449&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=66884&status=done&style=none&taskId=udb8dd11f-f334-4da3-9639-467cfa14413&title=&width=359.2)
+数据源信息的配置 application.yml
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748724862-e3ffd39a-2cb1-4e5e-93e3-50c2b07a18c7.png#averageHue=%23f4f3f1&clientId=u78d3fea4-c4d8-4&from=paste&height=157&id=u16447d39&originHeight=196&originWidth=418&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=40884&status=done&style=none&taskId=u565dc967-1712-4b4f-b3da-033c51f1490&title=&width=334.4)
+配置实体类 User
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748765196-0a84520c-e617-446d-83a2-224fa55b9bec.png#averageHue=%23f7f7f6&clientId=u78d3fea4-c4d8-4&from=paste&height=506&id=u14e672ab&originHeight=632&originWidth=762&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=202595&status=done&style=none&taskId=uf079e2a1-3030-40a9-9818-c9ee27f41ac&title=&width=609.6)
+mapper中写接口userMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748836990-1d867d69-4d6a-4644-a878-4208debf7c98.png#averageHue=%23f5f4f3&clientId=u78d3fea4-c4d8-4&from=paste&height=259&id=ucb9d3aa5&originHeight=324&originWidth=688&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=124820&status=done&style=none&taskId=ud2306d99-f979-49aa-8047-f9662535e02&title=&width=550.4)
+创建service包写UserService接口
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700748932857-c2a5b731-f730-4d53-b1e2-6bcde6ad489e.png#averageHue=%23f3f3f2&clientId=u78d3fea4-c4d8-4&from=paste&height=231&id=u593e15d2&originHeight=289&originWidth=640&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=95648&status=done&style=none&taskId=ubc3a529d-eb88-4725-a0d5-18bfb90f7d3&title=&width=512)
+创建UserService接口的实现类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700749012993-d819e40c-6d6b-4164-b344-ddca742e9cd1.png#averageHue=%23f4f4f3&clientId=u78d3fea4-c4d8-4&from=paste&height=292&id=uc940ce77&originHeight=365&originWidth=762&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=184565&status=done&style=none&taskId=ub0e266b0-9f56-4b18-940e-9377c88c07f&title=&width=609.6)
+创建controller包写UserController类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700749126998-f079cf9a-2834-47b3-9a47-55db3ccf0918.png#averageHue=%23f6f6f5&clientId=u78d3fea4-c4d8-4&from=paste&height=322&id=ua416e2ed&originHeight=403&originWidth=798&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=200739&status=done&style=none&taskId=ue4228d18-1b35-400e-8995-ec6506460c2&title=&width=638.4)
+测试
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700749229999-607f4cbc-fa4e-41b6-8a7d-ba8fad91b7b6.png#averageHue=%23fdfdfd&clientId=u78d3fea4-c4d8-4&from=paste&height=223&id=uec39f66a&originHeight=279&originWidth=477&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=18792&status=done&style=none&taskId=u76974364-9f80-4f24-98ba-4e10e21a7f3&title=&width=381.6)
+## Bean管理 （springboot自动配置的原理）
+### Bean扫描
+@SpringBootApplication是组合注解
+@CompontentScan默认扫描启动类所在包及其子包
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700749422826-70884917-07f8-42cd-9c40-6d5e0bab9ebb.png#averageHue=%23f0f2e9&clientId=u78d3fea4-c4d8-4&from=paste&height=377&id=u9db4e2c5&originHeight=471&originWidth=696&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=146239&status=done&style=none&taskId=uca7e6095-9d85-4bff-a050-506b92e4c17&title=&width=556.8)
+
+### Bean注册
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700749612882-975da044-3951-4c56-b715-622163303c2c.png#averageHue=%23e1cece&clientId=u78d3fea4-c4d8-4&from=paste&height=233&id=ue9af662a&originHeight=291&originWidth=1011&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=67962&status=done&style=none&taskId=uf65c5468-c29f-40e1-abf0-da98cded792&title=&width=808.8)
+（没看完---）
+
+
+### 注册条件
+（待看）
+
+## 自动配置原理
+为什么要使用自动配置原理
+
+（待看）
+
+
+# 实战篇
+## 开发模式和环境搭建
+开发模式
+参考接口文档进行开发
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700750019997-6a0fced5-c9ff-44c0-bd9f-f41ee2764dbe.png#averageHue=%23dbb480&clientId=u78d3fea4-c4d8-4&from=paste&height=388&id=uea342bd5&originHeight=485&originWidth=1029&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=153288&status=done&style=none&taskId=u7a4719f6-9ddd-42ec-b4f0-7014d26a995&title=&width=823.2)
+### 环境搭建
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700750099590-ccb7b729-6e41-41c3-a3b1-3a60df780bb7.png#averageHue=%23f6f3f0&clientId=u78d3fea4-c4d8-4&from=paste&height=408&id=uee95fb4c&originHeight=510&originWidth=898&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=106117&status=done&style=none&taskId=ud86764c6-fe1c-4ab6-baf4-70b07dc17a9&title=&width=718.4)
+
+1. 准备数据库
+
+连接数据库
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700796903531-1ecf0415-3e68-4c57-8ac2-a1b6205044b0.png#averageHue=%233d4247&clientId=ue823f14c-3afe-4&from=paste&height=663&id=u61cf1b2a&originHeight=829&originWidth=989&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=55341&status=done&style=none&taskId=ub60d0220-a175-4f29-805d-c164c97f8d8&title=&width=791.2)
+运行sql脚本
+写实体类 对应数据库中的table
+
+
+2. 配置依赖
+
+继承
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700794586386-12059f68-15fa-4717-b152-a11f28cc8f0a.png#averageHue=%23f7f6eb&clientId=ue823f14c-3afe-4&from=paste&height=87&id=u274a33d5&originHeight=109&originWidth=456&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=45911&status=done&style=none&taskId=ue5fe238a-c967-41b9-a22d-569dd0705a2&title=&width=364.8)
+引入web依赖、mybatis依赖、mysql驱动依赖
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700794644099-a2b59a40-dc87-4912-b20c-c7d677d6d518.png#averageHue=%23edebe2&clientId=ue823f14c-3afe-4&from=paste&height=296&id=u4cd87765&originHeight=370&originWidth=467&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=116586&status=done&style=none&taskId=u26ce9e28-5f0e-454b-bc84-c084f346bb5&title=&width=373.6)
+
+3. 配置文件application.yml引入mybatis配置信息
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700794686797-66d96327-c97a-46fd-8bdd-a6483984e144.png#averageHue=%23f9f9f7&clientId=ue823f14c-3afe-4&from=paste&height=177&id=u911b8dd3&originHeight=221&originWidth=502&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=49180&status=done&style=none&taskId=u76865d77-12fa-4c23-b425-2da831ef3b9&title=&width=401.6)
+3.创建包结构，并准备实体类
+controller
+service 子包
+mapper 接口
+pojo 实体类
+utils 存放工具类
+
+4.启动类
+@SpingBootApplication
+
+## 用户接口
+### 接口开发流程
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795122180-bf4e9d1d-0a59-4cc0-8555-8aa0235c88d6.png#averageHue=%23f8f4f0&clientId=ue823f14c-3afe-4&from=paste&height=145&id=u6LKg&originHeight=181&originWidth=986&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=33947&status=done&style=none&taskId=uc1239cb5-cb29-48b3-be32-07cb10f3c03&title=&width=788.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700796090339-00651b98-d8b3-4804-8856-f3431a96497b.png#averageHue=%23f1e3ce&clientId=ue823f14c-3afe-4&from=paste&height=123&id=lOOem&originHeight=154&originWidth=1176&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=61026&status=done&style=none&taskId=u4531819b-aa45-4097-8640-ed77097d643&title=&width=940.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700809685671-2f25a0ea-ca52-4daa-8cd0-edf07a77aab9.png#averageHue=%23f7eee2&clientId=u032e00a6-d257-4&from=paste&height=208&id=k4tiA&originHeight=260&originWidth=558&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=57076&status=done&style=none&taskId=uc5725102-72d7-46bc-bb6b-16c7ed89cf2&title=&width=446.4)
+lombok插件
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795073293-9c5f959f-6150-45bd-b5b1-0e8ae88876d0.png#averageHue=%23f2eee0&clientId=ue823f14c-3afe-4&from=paste&height=84&id=FOOLO&originHeight=105&originWidth=352&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=25624&status=done&style=none&taskId=u4067b39d-81f5-43eb-8b22-e659a07bc96&title=&width=281.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795043991-bcb47eae-b126-48f3-b006-a30b51aaa824.png#averageHue=%23f1eee3&clientId=ue823f14c-3afe-4&from=paste&height=232&id=XtGAT&originHeight=290&originWidth=384&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=80250&status=done&style=none&taskId=u257bae29-832e-44f2-957b-46e2f501b7e&title=&width=307.2)
+### 注册接口
+#### 注册接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795364269-b264625f-0e27-451c-9beb-427c5ed7e4b6.png#averageHue=%23fbfbfb&clientId=ue823f14c-3afe-4&from=paste&height=370&id=u485676cd&originHeight=462&originWidth=663&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=86968&status=done&style=none&taskId=u0c293db8-55a2-4078-98e0-ed23cbad6eb&title=&width=530.4)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795345486-56833049-4b7c-4d0b-8ee0-995854d9e330.png#averageHue=%23cbc7c2&clientId=ue823f14c-3afe-4&from=paste&height=339&id=udb853250&originHeight=424&originWidth=692&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=79010&status=done&style=none&taskId=ue56f3243-ace2-4591-8d6d-b814e77cda0&title=&width=553.6)
+#### result实体类 响应结果
+error方法：失败的响应数据
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795334482-322f0e18-7448-4122-a608-f62bb31e3d7f.png#averageHue=%23f7f6f2&clientId=ue823f14c-3afe-4&from=paste&height=422&id=u461830e4&originHeight=527&originWidth=869&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=237115&status=done&style=none&taskId=ucc90af25-c0aa-4fb2-859d-d452567a9f6&title=&width=695.2)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700796090339-00651b98-d8b3-4804-8856-f3431a96497b.png#averageHue=%23f1e3ce&clientId=ue823f14c-3afe-4&from=paste&height=123&id=u8c71f1e9&originHeight=154&originWidth=1176&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=61026&status=done&style=none&taskId=u4531819b-aa45-4097-8640-ed77097d643&title=&width=940.8)
+#### UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795627315-16045341-359b-4d75-8f15-3946b2b5f50c.png#averageHue=%23f9d0bd&clientId=ue823f14c-3afe-4&from=paste&height=125&id=EBW3I&originHeight=156&originWidth=808&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=37932&status=done&style=none&taskId=ub82dc249-43ff-46cc-9247-f655087dc9e&title=&width=646.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701140198183-620dc0a0-df99-4161-bf60-a4a0e717d445.png#averageHue=%23fafaf8&clientId=u8d35ffe8-da20-4&from=paste&height=562&id=u2433caa5&originHeight=703&originWidth=751&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=278144&status=done&style=none&taskId=ue19d4401-401d-4d46-9ce0-fc3b7ca2453&title=&width=600.8)
+#### UserService
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795645339-16b22059-0cf5-4486-b349-afd8d6173f42.png#averageHue=%23faf8b2&clientId=ue823f14c-3afe-4&from=paste&height=130&id=ud77dc0ff&originHeight=162&originWidth=792&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=36752&status=done&style=none&taskId=ufcb40f8d-3422-4cd0-99fb-08cb32e764b&title=&width=633.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701140311006-48ca3410-e7ca-4ba3-aa2a-fb45e36bd6a0.png#averageHue=%23f2f2f0&clientId=u8d35ffe8-da20-4&from=paste&height=530&id=ub9ad649c&originHeight=663&originWidth=709&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=274209&status=done&style=none&taskId=ud87c4fde-7c0d-44c3-bd0c-f9b49f17708&title=&width=567.2)
+#### UserMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700795658225-782d87fd-ac26-40dd-810e-dacddb8e7f78.png#averageHue=%23cdedc3&clientId=ue823f14c-3afe-4&from=paste&height=131&id=uffeb0f57&originHeight=164&originWidth=801&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=34895&status=done&style=none&taskId=u1c563181-4336-4081-b9b2-b436c252919&title=&width=640.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701140348978-5b0b4fee-aa27-4743-bb9c-f9084ccf4197.png#averageHue=%23f1f1ef&clientId=u8d35ffe8-da20-4&from=paste&height=445&id=u3ff6dee9&originHeight=556&originWidth=826&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=217656&status=done&style=none&taskId=u100c9601-e9ed-45dc-bddc-f1ba635c468&title=&width=660.8)
+
+### 注册接口参数校验
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700809824775-18a4be2c-5675-43e4-9747-31efe277a644.png#averageHue=%23f9d0bd&clientId=u032e00a6-d257-4&from=paste&height=370&id=u46ae46b0&originHeight=463&originWidth=985&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=162652&status=done&style=none&taskId=uab5abebb-d3ea-41f3-8980-d7f6fcaa5ea&title=&width=788)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700809858778-860cd2fd-5eac-4507-9285-14f3a627b3eb.png#averageHue=%23f0efef&clientId=u032e00a6-d257-4&from=paste&height=81&id=u9e7a3ae4&originHeight=101&originWidth=552&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=22724&status=done&style=none&taskId=u44e5a102-2cb1-43b9-a865-dc336d7c9ab&title=&width=441.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700809912767-d50e13db-8951-4364-b818-3856d445253c.png#averageHue=%23f8f6f6&clientId=u032e00a6-d257-4&from=paste&height=343&id=uca275bdd&originHeight=429&originWidth=987&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=198180&status=done&style=none&taskId=uf0364eba-559e-4e8f-9c1b-b548b199c24&title=&width=789.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810112496-6d3110da-6727-4b2c-9400-037cb78fe736.png#averageHue=%23faf9f8&clientId=u032e00a6-d257-4&from=paste&height=239&id=u8355a9b5&originHeight=299&originWidth=895&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=109804&status=done&style=none&taskId=uc9410332-bf25-4b0a-a0ec-0d93e14f90f&title=&width=716)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810137944-cdb5ca1e-e1b2-4a3f-8745-19218bbd4826.png#averageHue=%23f4f4e7&clientId=u032e00a6-d257-4&from=paste&height=182&id=u082bfcea&originHeight=228&originWidth=523&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=55321&status=done&style=none&taskId=u91507cd0-ccc9-4519-9988-9f7dc7cdab7&title=&width=418.4)
+#### 引入Sprin Validation起步注解
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701138138272-114e9d57-138a-4e9d-a3c4-a99d9aa8f5d4.png#averageHue=%23f1edde&clientId=u8d35ffe8-da20-4&from=paste&height=112&id=u6de7956c&originHeight=140&originWidth=543&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=57664&status=done&style=none&taskId=uf2e4a6d5-c2fc-40ba-b7a3-7df88b3dc8b&title=&width=434.4)
+#### 在参数前面添加
+controller类前需添加@Validated注解，函数添加@Pattern注解
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701138605743-9ff882c2-3e3b-4f5d-8ac3-64f2d7ef094e.png#averageHue=%23e7e7e5&clientId=u8d35ffe8-da20-4&from=paste&height=262&id=u987bdb09&originHeight=328&originWidth=1521&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=246785&status=done&style=none&taskId=u2da20e43-6512-4d41-bbd1-66eed4e1c07&title=&width=1216.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701138216102-b335e9ec-8e0a-4080-9f96-f6353a18b226.png#averageHue=%23fbfbfa&clientId=u8d35ffe8-da20-4&from=paste&height=193&id=u0e33dd12&originHeight=241&originWidth=1086&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=122173&status=done&style=none&taskId=u628a8639-3eaf-401d-8a15-ae8e8def6d4&title=&width=868.8)
+#### 参数校验失败
+全局异常处理器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701138334310-05147291-2e9b-4d29-8741-7f7fda5d4570.png#averageHue=%23f6f6f5&clientId=u8d35ffe8-da20-4&from=paste&height=336&id=u7080e469&originHeight=420&originWidth=1239&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=198048&status=done&style=none&taskId=u7f0c69ce-9907-4a8a-a4e5-2eaada5fd99&title=&width=991.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701138519592-22011ea4-bb9d-4ede-b5d4-f88e513e02c8.png#averageHue=%23f0efed&clientId=u8d35ffe8-da20-4&from=paste&height=269&id=u69d0051d&originHeight=336&originWidth=1255&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=204932&status=done&style=none&taskId=u34c836f8-268f-4afa-abeb-0e68e56bf06&title=&width=1004)
+### 登录接口
+#### 登录接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810195144-cec07cbe-1259-445e-9392-2f62367547cf.png#averageHue=%23f9f9f9&clientId=u032e00a6-d257-4&from=paste&height=356&id=u3bd7dce0&originHeight=445&originWidth=662&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=86323&status=done&style=none&taskId=u28f99635-457e-428e-8ac1-b925b66e37a&title=&width=529.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810206254-adc4d44c-32e9-49a2-ad30-f846a508dd99.png#averageHue=%23f9f8f8&clientId=u032e00a6-d257-4&from=paste&height=334&id=ub8d8f9a6&originHeight=417&originWidth=648&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=111830&status=done&style=none&taskId=u5d3b0fc8-523e-424e-9c2b-2fc536a8ce5&title=&width=518.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810236513-bfd3b8bf-5bd2-44b3-9fa1-c30d321a79f8.png#averageHue=%23fbfafa&clientId=u032e00a6-d257-4&from=paste&height=109&id=uf2157ac4&originHeight=136&originWidth=646&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=53351&status=done&style=none&taskId=u53097dab-a3e6-4fd5-b7ca-dbdb6bee44f&title=&width=516.8)
+
+#### UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810282201-5a2d3c48-3547-48e7-8743-1beaf0b75613.png#averageHue=%23f7d7c8&clientId=u032e00a6-d257-4&from=paste&height=124&id=u62bbe3c4&originHeight=155&originWidth=990&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=69581&status=done&style=none&taskId=uf888c070-fda1-43a9-9008-a86e7314429&title=&width=792)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701138892336-62a63e44-4ee4-42b6-882f-23d19edda27d.png#averageHue=%23fafaf8&clientId=u8d35ffe8-da20-4&from=paste&height=334&id=u4a14172e&originHeight=417&originWidth=1172&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=180779&status=done&style=none&taskId=u843d0163-b57d-4469-ac43-7179281dd64&title=&width=937.6)
+#### UserService、UserMapper中的方法已经在注册接口时实现
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700810309874-e23fb3f3-78cb-440e-9e3d-7559cce27a3a.png#averageHue=%23e4f3b9&clientId=u032e00a6-d257-4&from=paste&height=246&id=uf46a4420&originHeight=308&originWidth=814&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=49380&status=done&style=none&taskId=uec6e933b-fea5-424f-ad57-2e679b32469&title=&width=651.2)
+### 登录认证
+#### 问题：未登录也能访问其它资源
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701336461266-edd6e038-9f24-438e-a884-091f7ee98025.png#averageHue=%23f7f2ef&clientId=u3a7ab420-fb0e-4&from=paste&height=547&id=uf9de1b0c&originHeight=684&originWidth=1278&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=134644&status=done&style=none&taskId=u22937dd3-d88a-4303-ab6e-4c3e51067ec&title=&width=1022.4)
+#### 解决：令牌
+浏览器访问登录接口，登录成功后后台返回一个令牌
+访问其它接口前要检查令牌
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701336620603-37ff7665-c1b3-4575-b007-12c081d43928.png#averageHue=%23f2eae6&clientId=u3a7ab420-fb0e-4&from=paste&height=421&id=u6dc1096c&originHeight=526&originWidth=1212&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=170204&status=done&style=none&taskId=u18113775-2c3e-40b7-8660-98cbd925c6d&title=&width=969.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701336532844-cb01c3d9-847d-483d-84e2-de5c3c5fe783.png#averageHue=%23f6f0ed&clientId=u3a7ab420-fb0e-4&from=paste&height=546&id=u0712f399&originHeight=682&originWidth=1281&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=206173&status=done&style=none&taskId=u5372006e-5956-4226-9101-5f22712b3a3&title=&width=1024.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701169364883-42bec4a8-f320-4163-8729-20d24c66d9ab.png#averageHue=%23f9f1ed&clientId=u42d1c075-addf-4&from=paste&height=166&id=u8e23a8cc&originHeight=208&originWidth=1009&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=44593&status=done&style=none&taskId=u92f8cb43-f3da-47a3-94da-7a95b1ba84e&title=&width=807.2)
+### JWT令牌 （JSON Web Token）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701169479857-6d4a526b-63d7-45b4-9b6e-4fed857c4e75.png#averageHue=%23f6f2f0&clientId=u42d1c075-addf-4&from=paste&height=405&id=u0a0538f9&originHeight=506&originWidth=998&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=187559&status=done&style=none&taskId=u8b1c9f0c-204f-47dd-bc92-88aec21228b&title=&width=798.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701169540504-3f726504-d40b-42ec-9f94-2d1adc457666.png#averageHue=%23faf9ec&clientId=u42d1c075-addf-4&from=paste&height=402&id=ubcb241d7&originHeight=502&originWidth=1027&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=198898&status=done&style=none&taskId=u648fa2bc-cf61-43e2-9e99-b9a3bf56d04&title=&width=821.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701169960130-52a42f87-75f6-4e91-a0a2-5c173210ce78.png#averageHue=%23efefec&clientId=u42d1c075-addf-4&from=paste&height=676&id=u6c2e3446&originHeight=845&originWidth=1543&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=541251&status=done&style=none&taskId=uf1bd7931-22b3-414f-9926-4bda950e987&title=&width=1234.4)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701169985840-f5aae24d-897e-4d59-b9f3-29ea8e2187f8.png#averageHue=%23fcfade&clientId=u42d1c075-addf-4&from=paste&height=457&id=u42d42309&originHeight=571&originWidth=1552&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=277355&status=done&style=none&taskId=ua3be0e76-ba3b-4c8e-9849-e7e3f1904be&title=&width=1241.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170031024-c3e7ddf8-65bc-49b0-8ba5-1fb63a69924f.png#averageHue=%23fbfaf8&clientId=u42d1c075-addf-4&from=paste&height=298&id=ue7d33426&originHeight=373&originWidth=1052&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=192283&status=done&style=none&taskId=u5fa06d66-b773-494d-af5c-a32fc100345&title=&width=841.6)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701169870150-0b9f787c-e649-4e22-8a90-0d6c5af5048d.png#averageHue=%23f7f5f0&clientId=u42d1c075-addf-4&from=paste&height=514&id=uef875896&originHeight=643&originWidth=1535&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=233337&status=done&style=none&taskId=uf2fe1432-d3d6-446a-8fbd-02530045fc8&title=&width=1228)
+JWT工具类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170102450-a3fe1825-6db3-4850-a1b9-85444753d6a8.png#averageHue=%23f2f2f2&clientId=u42d1c075-addf-4&from=paste&height=646&id=u561faffb&originHeight=808&originWidth=1053&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=255082&status=done&style=none&taskId=u62fc3f6e-fa00-4ccd-b038-6b503202389&title=&width=842.4)
+在登录接口中生成token
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170196372-3df6d050-1467-4cb7-9035-d469effac13e.png#averageHue=%23fbfbf9&clientId=u42d1c075-addf-4&from=paste&height=468&id=u62f06433&originHeight=585&originWidth=1329&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=241958&status=done&style=none&taskId=ubffcc004-11ee-4f73-99bf-bc65418f7c4&title=&width=1063.2)
+在其它接口中认证token
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170324148-9c20483d-b9f0-4169-8e3e-0b6d1f7ce89b.png#averageHue=%23faf9f9&clientId=u42d1c075-addf-4&from=paste&height=154&id=u5d58fb3e&originHeight=193&originWidth=1013&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=108675&status=done&style=none&taskId=ua88ebf99-db5e-42c5-be01-c765d7cd423&title=&width=810.4)
+根据接口文档，在请求头中获取token
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170442648-ae113d0a-8887-4f54-a3ff-8c55bd66b121.png#averageHue=%23f1f1ef&clientId=u42d1c075-addf-4&from=paste&height=488&id=uaaeb2971&originHeight=610&originWidth=1277&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=243197&status=done&style=none&taskId=ud809bffb-67a0-4693-8427-9f0cf5675e6&title=&width=1021.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170479283-69dfbeea-d2f8-4f55-add9-ee6baf8589ec.png#averageHue=%23d3cec4&clientId=u42d1c075-addf-4&from=paste&height=184&id=u7851afa3&originHeight=230&originWidth=1055&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=28727&status=done&style=none&taskId=uc55bca7c-88b4-42a4-9ee5-922fbfd5f92&title=&width=844)
+### 登录认证-完成
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701336894552-69bf964e-632f-4a9d-92d0-fc423f8b7a42.png#averageHue=%23f0f0f0&clientId=u3a7ab420-fb0e-4&from=paste&height=577&id=uef4e6d29&originHeight=721&originWidth=953&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=286675&status=done&style=none&taskId=u2548de3e-b4f7-418c-afd0-95f8132c284&title=&width=762.4)工具类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701336803187-a465cb27-84bf-4ff4-89f4-362ce65c27b5.png#averageHue=%23f1f0ef&clientId=u3a7ab420-fb0e-4&from=paste&height=532&id=u51c479d3&originHeight=665&originWidth=1235&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=339359&status=done&style=none&taskId=u8b61e49d-1842-403c-9c6e-e179c071055&title=&width=988)
+生成token
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701336935401-5c3a278a-cc00-4143-a2da-63fc7047c9d2.png#averageHue=%23f3f3f2&clientId=u3a7ab420-fb0e-4&from=paste&height=586&id=u7b395955&originHeight=733&originWidth=1562&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=438125&status=done&style=none&taskId=u56a16fe9-bf69-455f-bfd6-caa37068dd4&title=&width=1249.6)
+其它接口服务前验证token
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701337069657-02ffde32-66f5-49ca-a0b0-33a9e4c5b111.png#averageHue=%23f9f9f8&clientId=u3a7ab420-fb0e-4&from=paste&height=438&id=ua407f1d2&originHeight=547&originWidth=1476&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=345898&status=done&style=none&taskId=ufeb1fcce-475d-4e66-85c2-34b5de498b7&title=&width=1180.8)
+#### 
+
+### 拦截器
+多个接口验证，代码重复
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170553726-3cf27ffe-7225-4c5c-a75a-a6f421ead26b.png#averageHue=%23f7ede8&clientId=u42d1c075-addf-4&from=paste&height=624&id=ucb5dc0a8&originHeight=780&originWidth=1440&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=308601&status=done&style=none&taskId=u80c1d8ec-ec89-4de8-b755-514094e8b96&title=&width=1152)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170603614-f80754ff-0c56-45be-972c-80e8c7829487.png#averageHue=%23f7eee9&clientId=u42d1c075-addf-4&from=paste&height=629&id=uef9976dc&originHeight=786&originWidth=1535&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=288474&status=done&style=none&taskId=u79b1009e-a6cb-45d8-83c1-6bd07d91a94&title=&width=1228)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170628692-543970ad-d623-4428-b3cf-3e219b9338c1.png#averageHue=%23f8f7f6&clientId=u42d1c075-addf-4&from=paste&height=571&id=uea224c4b&originHeight=714&originWidth=1524&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=348496&status=done&style=none&taskId=u5fd82844-9048-444c-bf45-9271d5849ac&title=&width=1219.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701170793764-5732bec2-abf3-4b8d-bbec-418c2165b3f3.png#averageHue=%23f9f9f7&clientId=u42d1c075-addf-4&from=paste&height=522&id=u60aa039b&originHeight=653&originWidth=1719&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=341860&status=done&style=none&taskId=ue9b55773-b1e0-4c8c-bfcd-6782af2ccf9&title=&width=1375.2)
+注册拦截器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701337446820-cd3e7c2a-5a83-4640-ab11-de746c7f1ff1.png#averageHue=%23faf9f9&clientId=u3a7ab420-fb0e-4&from=paste&height=174&id=u8c7387a8&originHeight=218&originWidth=1033&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=102052&status=done&style=none&taskId=u8ea7a7e8-2c91-41a7-8aaa-3359865b821&title=&width=826.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701337524205-f070b815-148e-4c0a-9e88-5a5bb02fbe92.png#averageHue=%23e8e8e7&clientId=u3a7ab420-fb0e-4&from=paste&height=258&id=ucaeafc55&originHeight=323&originWidth=1370&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=154811&status=done&style=none&taskId=u1cd99ab5-7a85-45ed-b184-0668e3e80d0&title=&width=1096)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701337488446-a0aa2768-a036-4f24-9675-3a55b145533f.png#averageHue=%23f3f3f2&clientId=u3a7ab420-fb0e-4&from=paste&height=502&id=u22f25685&originHeight=627&originWidth=1596&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=311800&status=done&style=none&taskId=u5d731f14-0e55-4a94-9ef5-32fb74cd5fd&title=&width=1276.8)
+注册拦截器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701337584399-814e2f9e-62f3-4f9a-8bfd-78a7a03eba5f.png#averageHue=%23f8f8f7&clientId=u3a7ab420-fb0e-4&from=paste&height=484&id=ube2b7fdd&originHeight=605&originWidth=1617&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=380920&status=done&style=none&taskId=u49b557c3-e589-4894-b673-1aeba7fa58e&title=&width=1293.6)
+测试
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701337698998-d1ccc70b-35ef-4e3f-beea-4dedfb6e93d3.png#averageHue=%23f1f1f0&clientId=u3a7ab420-fb0e-4&from=paste&height=462&id=u660b6711&originHeight=578&originWidth=1585&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=315417&status=done&style=none&taskId=ufe395581-654d-4c77-8122-5871c36e2ac&title=&width=1268)
+### 获取用户详细信息
+#### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347557386-779d753e-5f82-4aea-9fed-862fa9aa9c98.png#averageHue=%23f7f7f7&clientId=uef332e1c-9f2d-4&from=paste&height=202&id=uc956fa95&originHeight=253&originWidth=710&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=47598&status=done&style=none&taskId=u21cabce4-a998-4d03-9ea2-6064afd6d9b&title=&width=568)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347566492-43e95763-81cd-45e2-ade9-0c295b58f84c.png#averageHue=%23f9f9f8&clientId=uef332e1c-9f2d-4&from=paste&height=378&id=ud114d195&originHeight=473&originWidth=703&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=125796&status=done&style=none&taskId=u6c7e08f9-d339-40ba-8d7b-95acbba0933&title=&width=562.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347572742-0cb3bca8-06cb-41c8-84ad-60a7a4258a04.png#averageHue=%23d7d7d1&clientId=uef332e1c-9f2d-4&from=paste&height=266&id=u0b3b047c&originHeight=332&originWidth=697&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=63531&status=done&style=none&taskId=u8f7c1a1e-b21e-4372-9680-4f532f39d0b&title=&width=557.6)
+#### UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347636981-8a75b5f0-83df-4a08-b914-faacd60787f2.png#averageHue=%23f8ded2&clientId=uef332e1c-9f2d-4&from=paste&height=174&id=uc83b89f2&originHeight=218&originWidth=1039&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=71468&status=done&style=none&taskId=u8a59c1c2-42bf-4f07-b06e-394b9fdacf0&title=&width=831.2)
+需要用到token中的username来获取用户信息
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347793857-ce5562b3-93c7-4568-bf35-c7f20b9434e0.png#averageHue=%23fafaf7&clientId=uef332e1c-9f2d-4&from=paste&height=242&id=ub767f30c&originHeight=303&originWidth=944&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=117818&status=done&style=none&taskId=ue2359d59-7bb3-4da7-a08e-efe5ff5aa26&title=&width=755.2)
+password也响应
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347953877-ff354794-5845-47f7-9e63-fe4556650e18.png#averageHue=%23f7f6f6&clientId=uef332e1c-9f2d-4&from=paste&height=315&id=uf8865e1b&originHeight=394&originWidth=944&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=89794&status=done&style=none&taskId=ua2df387e-a719-417a-b753-d45b0fb53db&title=&width=755.2)
+忽略password
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347919116-a4360611-20b5-4746-9c02-eb92647a3964.png#averageHue=%23fafaf8&clientId=uef332e1c-9f2d-4&from=paste&height=456&id=uc66b3c86&originHeight=570&originWidth=1236&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=254022&status=done&style=none&taskId=u500f2f86-1f56-4e6f-93f4-ebbbeb77a2e&title=&width=988.8)
+createTime、updateTime为null
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348130958-37feb9ac-1e0e-4dd5-9798-276d8499d094.png#averageHue=%23e8e5d9&clientId=uef332e1c-9f2d-4&from=paste&height=471&id=uc2c401b2&originHeight=589&originWidth=660&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=228466&status=done&style=none&taskId=u90593080-523b-4a33-9e60-9f971715bc2&title=&width=528)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348091609-c6d251c3-50e3-45fd-aeb1-d95f5db7a668.png#averageHue=%23fafafa&clientId=uef332e1c-9f2d-4&from=paste&height=283&id=ue0a1194c&originHeight=354&originWidth=600&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=70176&status=done&style=none&taskId=u750299ac-7737-4983-8a4c-a12ff94a8f1&title=&width=480)
+开启下划线转驼峰命名
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348028870-a62194b0-ccc1-4dc7-8016-a59160b2c609.png#averageHue=%23fbfaf9&clientId=uef332e1c-9f2d-4&from=paste&height=375&id=u8c3c2b8c&originHeight=469&originWidth=991&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=115196&status=done&style=none&taskId=ud4aeb45a-9a62-486a-afe2-b1297b8ab5d&title=&width=792.8)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348149789-9f5318f4-e1ed-4cc4-b1c1-9e8cd6c1b981.png#averageHue=%23fbfafa&clientId=uef332e1c-9f2d-4&from=paste&height=290&id=u2c6af80a&originHeight=363&originWidth=662&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=78547&status=done&style=none&taskId=u60744a80-f6ab-476c-9e49-da8994c310e&title=&width=529.6)
+
+#### UserService\UserMapper已完成
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701347658851-cea1a9ac-3169-4232-9e3a-3dfff1fae9d1.png#averageHue=%23e5f3b9&clientId=uef332e1c-9f2d-4&from=paste&height=279&id=u7451198a&originHeight=349&originWidth=920&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=56470&status=done&style=none&taskId=u2db67275-d37d-434e-9f14-4f822af8e92&title=&width=736)
+### 获取用户详细信息-优化 
+不用每次都从token中获取
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348234250-9179098a-de5d-4368-84e7-674801020a09.png#averageHue=%23dce7db&clientId=uef332e1c-9f2d-4&from=paste&height=638&id=ua83aa7b7&originHeight=797&originWidth=1267&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=273958&status=done&style=none&taskId=ufb4ef644-20ef-44e1-9c9e-368d074bcb2&title=&width=1013.6)
+#### 使用ThreadLocal
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348310949-20123d34-511c-4796-b330-26f1e146f9f0.png#averageHue=%23ede4e3&clientId=uef332e1c-9f2d-4&from=paste&height=650&id=u76b78e88&originHeight=813&originWidth=778&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=152831&status=done&style=none&taskId=u1b9036a8-a20b-46f5-ad64-111868f934b&title=&width=622.4)
+test类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348446450-f224d6d2-7844-4e8a-9b67-3f9589070136.png#averageHue=%23f2f2f0&clientId=uef332e1c-9f2d-4&from=paste&height=644&id=u10c31c9c&originHeight=805&originWidth=1387&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=421441&status=done&style=none&taskId=uc9603726-dc5c-42ca-bb72-9f412553a9e&title=&width=1109.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348468907-f2f7cd11-06a4-4a31-a8ed-81c6a36bf0fb.png#averageHue=%23fafafa&clientId=uef332e1c-9f2d-4&from=paste&height=206&id=u16cc36f5&originHeight=257&originWidth=699&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=43561&status=done&style=none&taskId=ubec10500-fa21-4312-90b0-a050f2e4c10&title=&width=559.2)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348607084-33127884-b2fd-4c30-8add-6b00ea8f6559.png#averageHue=%23d8cbba&clientId=uef332e1c-9f2d-4&from=paste&height=623&id=u960a83cf&originHeight=779&originWidth=1606&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=301858&status=done&style=none&taskId=u5799cdb9-8749-4670-8785-b296478065b&title=&width=1284.8)
+工具栏ThreadLocal
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348692705-69763583-e5b5-403a-85af-a313edaa4fb8.png#averageHue=%23f8f7f6&clientId=uef332e1c-9f2d-4&from=paste&height=520&id=u3f854f3d&originHeight=650&originWidth=1265&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=342227&status=done&style=none&taskId=ub80ebffb-148a-4a81-bc7a-0681ee957aa&title=&width=1012)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348712484-6b2cee34-7b75-48d5-8f20-53d214cb5263.png#averageHue=%23fbfbf8&clientId=uef332e1c-9f2d-4&from=paste&height=149&id=ubd1102d5&originHeight=186&originWidth=777&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=44629&status=done&style=none&taskId=ua08eacaa-6bee-48f0-a4d1-89a60fa88db&title=&width=621.6)
+在拦截器中ThreadLocal.set(token)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349029941-ff0193a7-ab2d-4514-9085-307d983140fd.png#averageHue=%23eeeeec&clientId=uef332e1c-9f2d-4&from=paste&height=506&id=u78747e2a&originHeight=633&originWidth=1547&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=375590&status=done&style=none&taskId=uad0bad3e-fbce-48a8-a4ae-ca8d0fc7656&title=&width=1237.6)
+UserInfo中调用ThreadLocal.get()
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348792925-4cab9f8e-0df5-49de-8306-468de76690d0.png#averageHue=%23f7f6f5&clientId=uef332e1c-9f2d-4&from=paste&height=524&id=u424e6a8a&originHeight=655&originWidth=1299&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=361121&status=done&style=none&taskId=u7da2f94a-4aa3-4756-9dbc-8c9eb536c1a&title=&width=1039.2)
+ThreadLocal.remove()在拦截器中的after compliation
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348875382-e701d217-9411-4fb3-a72b-493053a01416.png#averageHue=%23eeeeed&clientId=uef332e1c-9f2d-4&from=paste&height=490&id=u6baff24d&originHeight=612&originWidth=1864&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=371057&status=done&style=none&taskId=uf90448a7-1db0-4a7a-be3e-0e83b05baf7&title=&width=1491.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701348913189-433519df-77b7-4805-af6b-e1c9404b5505.png#averageHue=%23f2f2e5&clientId=uef332e1c-9f2d-4&from=paste&height=200&id=u89c3db8a&originHeight=250&originWidth=817&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=73663&status=done&style=none&taskId=u79eebf20-c37f-42dc-bfd9-bc5a24c2c3d&title=&width=653.6)
+### 更新用户基本信息
+#### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349135754-c2c5b111-3279-4d8a-b062-60547ae4bd44.png#averageHue=%23f3f3f2&clientId=uef332e1c-9f2d-4&from=paste&height=754&id=ue9cb4e29&originHeight=943&originWidth=1059&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=247420&status=done&style=none&taskId=ufef67c4f-4922-4d1a-b9aa-6dba76244d8&title=&width=847.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349146647-8121350c-2a98-4f1a-bb67-a14043f3d5ea.png#averageHue=%23f9f9f8&clientId=uef332e1c-9f2d-4&from=paste&height=494&id=u34bc8f89&originHeight=617&originWidth=1041&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=138368&status=done&style=none&taskId=ud569657f-0949-4c8a-8ae5-20ea20bf6f2&title=&width=832.8)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349213673-0ac424dc-64d0-4d51-b180-786fcc4d1564.png#averageHue=%23f9ebce&clientId=uef332e1c-9f2d-4&from=paste&height=630&id=ue1cee60c&originHeight=787&originWidth=1573&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=158800&status=done&style=none&taskId=u647dd8f0-e40b-4c8f-8b15-5d72fe07eac&title=&width=1258.4)
+#### UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349269051-8a1ce2dd-5228-4c48-bbaa-62f98f110eea.png#averageHue=%23f2f1f0&clientId=uef332e1c-9f2d-4&from=paste&height=642&id=u0425a4f0&originHeight=803&originWidth=1368&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=439231&status=done&style=none&taskId=u8acb5a04-f6ba-46cf-986f-5dc94655911&title=&width=1094.4)
+#### UserService
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349307773-306d453f-ce86-4f2f-8ebf-af4930b482b7.png#averageHue=%23f7f7f6&clientId=uef332e1c-9f2d-4&from=paste&height=584&id=u7217eead&originHeight=730&originWidth=1154&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=290477&status=done&style=none&taskId=u6e1d7eba-80a0-4b8f-9d0a-6406cc42e43&title=&width=923.2)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349351059-bc3da355-ee66-4015-9335-5e6e57edd51b.png#averageHue=%23f0efee&clientId=uef332e1c-9f2d-4&from=paste&height=669&id=u02d79163&originHeight=836&originWidth=1292&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=442606&status=done&style=none&taskId=u8e04a024-5d1a-4201-aa31-c5f64cb0ff5&title=&width=1033.6)
+#### UserMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349401342-b37e003f-db5e-4aa4-8b11-e2af37d53b20.png#averageHue=%23f3f2f1&clientId=uef332e1c-9f2d-4&from=paste&height=554&id=ua66f4dfc&originHeight=692&originWidth=1511&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=395739&status=done&style=none&taskId=u74f43bab-1a1e-463d-91a2-4647b8c3e37&title=&width=1208.8)
+### 更新用户基本信息校验
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349540254-769ca495-bb8b-405e-8e65-df6ec4fb7fd2.png#averageHue=%23f6e6de&clientId=uef332e1c-9f2d-4&from=paste&height=546&id=ue0fffda1&originHeight=683&originWidth=1276&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=255652&status=done&style=none&taskId=u6dc5b29a-3b39-4dd1-8ad2-7200712eed4&title=&width=1020.8)
+对实体参数（User）完成校验
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349586351-7e9a56f2-2e07-4b87-b3c1-0edd3b3b3a89.png#averageHue=%23fad1be&clientId=uef332e1c-9f2d-4&from=paste&height=202&id=u79442297&originHeight=253&originWidth=1257&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=73566&status=done&style=none&taskId=uabe020d6-b911-4331-b017-131eaa75c3b&title=&width=1005.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349614672-fa812a22-e43f-413b-8716-acf1c771ae91.png#averageHue=%23f2eae9&clientId=uef332e1c-9f2d-4&from=paste&height=554&id=uee72e0ec&originHeight=692&originWidth=1538&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=406643&status=done&style=none&taskId=u92790384-73f4-413f-ad8a-55f9ccd5dff&title=&width=1230.4)
+1、User实体类添加注解
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349658685-bc6f0eed-a800-45f2-a78c-4a68fb836c8e.png#averageHue=%23f8f8f7&clientId=uef332e1c-9f2d-4&from=paste&height=677&id=ucc5ac96e&originHeight=846&originWidth=1509&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=465292&status=done&style=none&taskId=u41f07b9d-35e9-4b18-869f-56dbd6bbac1&title=&width=1207.2)
+2、接口中添加@Validated
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349738465-1163ff02-616a-484d-b9e5-3f831cd7a663.png#averageHue=%23f6f5e6&clientId=uef332e1c-9f2d-4&from=paste&height=294&id=u24b4f41f&originHeight=368&originWidth=861&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=83871&status=done&style=none&taskId=u6cf32a50-20c7-4ad6-9de5-d779fd3c51d&title=&width=688.8)
+### 更新用户头像
+#### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349778900-c1a5b59a-0ee5-4572-bb8e-ca493bd2a713.png#averageHue=%23fafafa&clientId=uef332e1c-9f2d-4&from=paste&height=578&id=u52dc505a&originHeight=722&originWidth=1048&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=188814&status=done&style=none&taskId=uc9b54526-57d3-4084-b3f8-a537e16959f&title=&width=838.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349814162-f744243c-834b-48a6-b3b4-a81ff5bc8d75.png#averageHue=%23f9f9f9&clientId=uef332e1c-9f2d-4&from=paste&height=504&id=u08c7192b&originHeight=630&originWidth=1089&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=140812&status=done&style=none&taskId=u202bffa1-8b9b-4178-88af-84c44654d47&title=&width=871.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349840624-faa2b2bb-54d7-4061-8add-9416ecb323bc.png#averageHue=%23f7e9cc&clientId=uef332e1c-9f2d-4&from=paste&height=624&id=u73b61812&originHeight=780&originWidth=1557&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=175329&status=done&style=none&taskId=uef267335-511d-455e-be17-c510dad8bd3&title=&width=1245.6)
+#### UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349889639-582fd2ee-843a-4d6c-9149-161b4961eaff.png#averageHue=%23f7f6f4&clientId=uef332e1c-9f2d-4&from=paste&height=468&id=u8d40571c&originHeight=585&originWidth=1191&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=350322&status=done&style=none&taskId=u66a5c245-1573-477e-a45e-2e57dfe7f5c&title=&width=952.8)
+#### UserService
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349930913-a1045130-cdce-4563-9ae7-bdc5dcbfcecc.png#averageHue=%23f4f4f3&clientId=uef332e1c-9f2d-4&from=paste&height=473&id=u16a420b8&originHeight=591&originWidth=769&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=124178&status=done&style=none&taskId=uc426847b-ace0-4b43-91ec-47ea95f8960&title=&width=615.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349915463-ab0b71c3-a651-444b-b12e-eedd6b247f27.png#averageHue=%23efeeed&clientId=uef332e1c-9f2d-4&from=paste&height=485&id=u6483f513&originHeight=606&originWidth=1237&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=298011&status=done&style=none&taskId=u1b6b8084-b42f-4892-98e7-61dcc10f0b7&title=&width=989.6)
+传输id
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350027015-12533348-9567-4c54-aa12-629394ba6761.png#averageHue=%23efeeed&clientId=uef332e1c-9f2d-4&from=paste&height=480&id=u27b57a06&originHeight=600&originWidth=1010&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=244423&status=done&style=none&taskId=u69d3be77-a086-40b5-abc9-5191f188139&title=&width=808)
+#### UserMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701349966760-5ffe09f4-f621-4519-bc0f-bd72941e2ccb.png#averageHue=%23ededeb&clientId=uef332e1c-9f2d-4&from=paste&height=381&id=uf5b59030&originHeight=476&originWidth=1283&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=263681&status=done&style=none&taskId=u834deeb4-f04e-47b4-9fe2-3bfa4985688&title=&width=1026.4)
+id传输
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350037571-e7388c96-c3b3-408f-9a38-589e4cfc663f.png#averageHue=%23f0f0ee&clientId=uef332e1c-9f2d-4&from=paste&height=442&id=uf089aec5&originHeight=553&originWidth=1217&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=260235&status=done&style=none&taskId=u97bad6de-f15c-4094-b37e-3a4ba2c6b41&title=&width=973.6)
+{update}改为now()
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350088795-e01ca0da-513c-42f8-8171-a676e78fd38e.png#averageHue=%23fbfaf4&clientId=uef332e1c-9f2d-4&from=paste&height=79&id=ued8977c3&originHeight=99&originWidth=1080&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=51669&status=done&style=none&taskId=u925b8b14-ce21-4f3f-996f-5b9f0b7a5af&title=&width=864)
+#### 参数校验（头像必须为url）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350172698-23880db3-aeb4-4d93-8b79-33268a2cd9a6.png#averageHue=%23f5f4f3&clientId=uef332e1c-9f2d-4&from=paste&height=273&id=u7f1f3d5e&originHeight=341&originWidth=1085&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=142583&status=done&style=none&taskId=uaad3dcb4-ac91-490b-819d-48655a144e5&title=&width=868)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350155398-b0ae00eb-b133-41d6-b701-f5116f473a93.png#averageHue=%23eeedeb&clientId=uef332e1c-9f2d-4&from=paste&height=414&id=u926d019d&originHeight=518&originWidth=1002&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=194188&status=done&style=none&taskId=u3787bfd2-9517-4048-811a-0f785929325&title=&width=801.6)
+### 更新用户密码
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350241278-a9d91f81-45aa-4c61-9108-88c05e8a00d6.png#averageHue=%23d9d9d8&clientId=uef332e1c-9f2d-4&from=paste&height=478&id=u73f05b44&originHeight=597&originWidth=1234&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=131282&status=done&style=none&taskId=uafa6bffb-1cf1-4017-919f-bb6a85a9158&title=&width=987.2)
+#### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350255070-0a7ff370-3e94-46eb-9794-37bf3552b032.png#averageHue=%23f4f4f4&clientId=uef332e1c-9f2d-4&from=paste&height=701&id=u5b20709e&originHeight=876&originWidth=1060&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=198659&status=done&style=none&taskId=u20f6b290-ff1c-423c-9cfc-ae6fa35bc6c&title=&width=848)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350275924-01a530ab-4835-49fa-8d52-22ce16894589.png#averageHue=%23f9f9f9&clientId=uef332e1c-9f2d-4&from=paste&height=510&id=uc31b08e6&originHeight=637&originWidth=1078&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=140140&status=done&style=none&taskId=ub31a4925-50df-4e03-a5c8-ff473c23d24&title=&width=862.4)	
+#### UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350311390-28fa7f4d-d396-4b1d-a51c-9f05fa3b82a1.png#averageHue=%23f8eacd&clientId=uef332e1c-9f2d-4&from=paste&height=620&id=u8b137fea&originHeight=775&originWidth=1575&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=166843&status=done&style=none&taskId=u2e2b497c-e0d3-4191-883c-d52c4c95a79&title=&width=1260)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350502978-894b063a-e597-4891-a660-0b2fbe99a3be.png#averageHue=%23f8f8f7&clientId=uef332e1c-9f2d-4&from=paste&height=781&id=u4606d4cd&originHeight=976&originWidth=1676&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=600726&status=done&style=none&taskId=u34cd684c-5ca9-4123-a1a1-1600acc864f&title=&width=1340.8)
+#### UserService
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350523627-da17c8c0-a658-4719-82d6-ecae069c6c8d.png#averageHue=%23f3f3f2&clientId=uef332e1c-9f2d-4&from=paste&height=618&id=u35f9f48f&originHeight=773&originWidth=992&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=263782&status=done&style=none&taskId=ubd650d71-a0ea-4f99-b40a-06776d22dd1&title=&width=793.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350612622-1f37e272-af0d-4b5c-ae28-de022138cc22.png#averageHue=%23f7f6f5&clientId=uef332e1c-9f2d-4&from=paste&height=661&id=u271c9c88&originHeight=826&originWidth=1190&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=435173&status=done&style=none&taskId=u17801bcc-29c6-419f-81a9-79d707ded4f&title=&width=952)
+#### UserMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701350636086-0f3092cd-da13-4393-ba4f-ad35032e405d.png#averageHue=%23f4f3f2&clientId=uef332e1c-9f2d-4&from=paste&height=654&id=uc97f631a&originHeight=817&originWidth=1220&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=391300&status=done&style=none&taskId=ub8f97934-ebd9-47dd-8285-9e86527c17a&title=&width=976)
+## 文章分类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108394707-45ac1100-a72d-495f-ac65-e68026eaf56d.png#averageHue=%23f1e9e9&clientId=u330f2e18-54dd-4&from=paste&height=426&id=u64ac1272&originHeight=532&originWidth=623&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=68710&status=done&style=none&taskId=u9d76ad80-4bbf-4749-b756-d25ae07416c&title=&width=498.4)
+### 新增文章分类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701427402391-adc07b6e-b9ab-4a09-9d55-9fc60d33fed3.png#averageHue=%23a9a9a9&clientId=uc406f69a-438f-4&from=paste&height=342&id=u9eba81cb&originHeight=427&originWidth=989&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=72330&status=done&style=none&taskId=uc0719e3d-c205-428a-886d-f7c7045a027&title=&width=791.2)
+#### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701427418599-de4f9226-7361-4d90-960f-d3cdca28cc72.png#averageHue=%23f8f8f8&clientId=uc406f69a-438f-4&from=paste&height=405&id=u9e67e1d5&originHeight=506&originWidth=654&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=95792&status=done&style=none&taskId=u3f9c53f8-33f3-4726-95fc-4bbbb02700c&title=&width=523.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701427435143-5294c416-fa96-4214-a0bb-82e791417658.png#averageHue=%23faf9f9&clientId=uc406f69a-438f-4&from=paste&height=314&id=u03f639d7&originHeight=393&originWidth=652&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=76648&status=done&style=none&taskId=u0274fd09-c55d-41cb-9d9e-f6c85166936&title=&width=521.6)
+#### CategoryController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701427509973-1a83c653-37fc-4b93-9717-f1c3cc185920.png#averageHue=%23f9ebce&clientId=uc406f69a-438f-4&from=paste&height=393&id=u5e001a6a&originHeight=491&originWidth=975&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=90029&status=done&style=none&taskId=u9ab8a3e8-1c1e-4161-afdd-99115ccc13f&title=&width=780)
+#### CategoryController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108515134-cf0073f3-a75e-4f16-8134-07c7a2ac4a83.png#averageHue=%23f0f0ee&clientId=u330f2e18-54dd-4&from=paste&height=645&id=u9b90470d&originHeight=806&originWidth=1137&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=450287&status=done&style=none&taskId=u6c5b9241-3cec-418c-b895-a813d612d87&title=&width=909.6)
+#### CategoryService
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108547456-a6cbb56b-eb7b-4040-9359-83c36db6a68a.png#averageHue=%23f2f2f1&clientId=u330f2e18-54dd-4&from=paste&height=680&id=u270b7dff&originHeight=850&originWidth=950&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=252111&status=done&style=none&taskId=u216106ce-883d-4a1e-abba-ac157bd675d&title=&width=760)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108584658-f845fd00-2b97-4a90-9422-e137f5c13042.png#averageHue=%23f2f1f0&clientId=u330f2e18-54dd-4&from=paste&height=663&id=uada93e97&originHeight=829&originWidth=1097&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=377687&status=done&style=none&taskId=u467982eb-f273-4254-8e81-a0c9ed47ffc&title=&width=877.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108659272-ea865757-aec7-4efa-8bd2-455cf149ba73.png#averageHue=%23ede9de&clientId=u330f2e18-54dd-4&from=paste&height=717&id=u6236d9f0&originHeight=896&originWidth=1336&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=549237&status=done&style=none&taskId=ufd7c558d-2c06-4bb2-ab81-921a0d49a7b&title=&width=1068.8)
+#### CategoryMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108760551-c67733d1-bf14-40dc-a644-a00938d7ee78.png#averageHue=%23f9f9f8&clientId=u330f2e18-54dd-4&from=paste&height=634&id=u47a1baa0&originHeight=792&originWidth=1516&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=371428&status=done&style=none&taskId=u677c3288-e7b6-441d-a2b2-395d351bd2e&title=&width=1212.8)
+#### Category实体类添加校验
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108855299-c524f3c5-6139-4092-a937-ce26f7304472.png#averageHue=%23dedede&clientId=u330f2e18-54dd-4&from=paste&height=147&id=ub57bee72&originHeight=184&originWidth=1023&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=62522&status=done&style=none&taskId=ubf31aa67-d132-4e0e-8b59-e1da29081fb&title=&width=818.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108865935-d5b77524-9afc-478a-b6d2-5d50fa99db57.png#averageHue=%23f6f6f5&clientId=u330f2e18-54dd-4&from=paste&height=518&id=u2029aca4&originHeight=647&originWidth=1083&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=308609&status=done&style=none&taskId=u078b0d2e-14c6-4097-8aeb-f2436a2f6da&title=&width=866.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108882137-eb18b4a0-9169-47d3-b963-c6094f3534eb.png#averageHue=%23f7f7f5&clientId=u330f2e18-54dd-4&from=paste&height=529&id=u7424f852&originHeight=661&originWidth=1474&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=358561&status=done&style=none&taskId=ue1fcdd58-fb11-4e5e-a899-3534ecd7a83&title=&width=1179.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108922071-9b8b66cc-fc42-4917-a67f-fbdd0f0ba4c1.png#averageHue=%23f3f3e4&clientId=u330f2e18-54dd-4&from=paste&height=214&id=ua1e12326&originHeight=268&originWidth=835&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=76856&status=done&style=none&taskId=u077c0aa9-61ee-42d2-a92d-1109731760b&title=&width=668)
+### 文章分类列表
+#### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702108997193-b610b9f1-2eba-475c-a758-3ff6a2e86884.png#averageHue=%23fcfcfc&clientId=u330f2e18-54dd-4&from=paste&height=301&id=u051f286b&originHeight=376&originWidth=1041&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=87638&status=done&style=none&taskId=u18bbf078-f1b0-4c4b-ac87-2b2746162b4&title=&width=832.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109011422-29f7095e-6c5e-4842-af3b-236ad8bb7a40.png#averageHue=%23f7f7f7&clientId=u330f2e18-54dd-4&from=paste&height=476&id=udc6c683c&originHeight=595&originWidth=1030&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=194692&status=done&style=none&taskId=u6b4a3df8-693e-45d9-b4c3-b84dcdd3c3a&title=&width=824)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109043163-a4db421d-a24e-4aab-8d17-7eeeb3eaf51d.png#averageHue=%23faeccf&clientId=u330f2e18-54dd-4&from=paste&height=626&id=ufc9d2f9d&originHeight=783&originWidth=1575&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=143200&status=done&style=none&taskId=u333bfca1-02b4-4175-a791-0ce4e1a37bd&title=&width=1260)
+#### CategoryController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109101840-44b4aad3-0d01-49cc-9d3e-5e4360976cc2.png#averageHue=%23ededeb&clientId=u330f2e18-54dd-4&from=paste&height=498&id=u7f6ba6df&originHeight=622&originWidth=1194&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=368687&status=done&style=none&taskId=ucff0cc2c-b50c-4e3e-a9a0-47c2f03442f&title=&width=955.2)
+#### CategoryService
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109110353-ec9413c1-85f6-45de-a79c-6f74fde72059.png#averageHue=%23f6f6f5&clientId=u330f2e18-54dd-4&from=paste&height=545&id=u520f2239&originHeight=681&originWidth=1077&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=276243&status=done&style=none&taskId=u1254338e-26a4-4bf9-b3ed-cfb0ceab2de&title=&width=861.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109159748-750e40c4-7668-433d-a7ae-159a55c6c6da.png#averageHue=%23f6f6f4&clientId=u330f2e18-54dd-4&from=paste&height=501&id=u6619f3c7&originHeight=626&originWidth=1290&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=363694&status=done&style=none&taskId=uf95af1f0-f79c-4b92-82da-301a2bda3df&title=&width=1032)
+#### CategoryMapper
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109189125-fbd2f8be-c069-4766-9034-87e23a93cf7e.png#averageHue=%23f8f8f7&clientId=u330f2e18-54dd-4&from=paste&height=503&id=u28f1fcbb&originHeight=629&originWidth=1550&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=372466&status=done&style=none&taskId=u5dc62c55-083b-4271-b151-2528682f2a8&title=&width=1240)
+#### 转换日期格式
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109304554-ac6633a8-71fb-4058-bc6d-c074020db9ab.png#averageHue=%23fcfcfb&clientId=u330f2e18-54dd-4&from=paste&height=242&id=ubc7a7b78&originHeight=303&originWidth=1367&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=107346&status=done&style=none&taskId=u15fe57bb-045a-4639-a8f6-78ee8cb6238&title=&width=1093.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702109278502-87d39da0-363a-446b-a79d-9e70087b524f.png#averageHue=%23f8f7f6&clientId=u330f2e18-54dd-4&from=paste&height=481&id=ue502ebca&originHeight=601&originWidth=1375&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=359978&status=done&style=none&taskId=u6f77245f-fef0-4d70-bbdf-5e33da91cf4&title=&width=1100)
+
+## 文件上传
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431118794-e9e3c86c-547e-48d8-b9ff-6bf53b17e5f9.png#averageHue=%23f8f8f8&clientId=uc406f69a-438f-4&from=paste&height=442&id=u32842927&originHeight=552&originWidth=887&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=128287&status=done&style=none&taskId=u404bef17-aae6-4b35-ad8a-9a3e62aa27d&title=&width=709.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431184563-3ef903aa-f2a4-4d82-9804-30272412c8de.png#averageHue=%23f7f7f7&clientId=uc406f69a-438f-4&from=paste&height=450&id=u1ba24939&originHeight=563&originWidth=905&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=177312&status=done&style=none&taskId=u304610ae-31df-42b9-bf3d-88ea637f6a8&title=&width=724)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431157120-bcdafbfe-7f0a-447b-95fe-bce9956292ea.png#averageHue=%23e0dedd&clientId=uc406f69a-438f-4&from=paste&height=534&id=ud199b8eb&originHeight=668&originWidth=1204&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=211320&status=done&style=none&taskId=uc628bbe4-3183-4958-b297-fd99aa19fc9&title=&width=963.2)
+前端三要素 post、multipart/form-date、file
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431215220-1fa9dfb8-6698-4e39-b538-06d73d82af7b.png#averageHue=%23f2e9e1&clientId=uc406f69a-438f-4&from=paste&height=217&id=uccb4221f&originHeight=271&originWidth=697&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=94393&status=done&style=none&taskId=u6555ec2a-414f-4c4e-970d-2b9f8898eca&title=&width=557.6)
+后端
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431254069-8da02051-0aaa-4228-9b77-ed0b4ce9d65a.png#averageHue=%23f6f5dd&clientId=uc406f69a-438f-4&from=paste&height=242&id=u0ac103ef&originHeight=303&originWidth=830&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=148836&status=done&style=none&taskId=uaf81d1df-ca82-4ea2-97b7-3f180e06f10&title=&width=664)
+### FileUploadController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431307885-0f86faa3-0dfd-4533-b550-0bb46516870f.png#averageHue=%23f4d3c3&clientId=uc406f69a-438f-4&from=paste&height=218&id=u26262a17&originHeight=272&originWidth=1138&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=81572&status=done&style=none&taskId=ub84df84b-bbb7-457a-a958-28a79fa2865&title=&width=910.4)
+此时文件还在本地，
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431414590-5ccf381c-e471-4ad7-ba3f-c9a074c7f7dd.png#averageHue=%23efefee&clientId=uc406f69a-438f-4&from=paste&height=442&id=u63cfa7c1&originHeight=553&originWidth=1359&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=348683&status=done&style=none&taskId=u9e331d9e-045c-413f-90d9-83323168bc4&title=&width=1087.2)
+解决文件同名覆盖问题：借助uuid
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431601232-375b771d-fd0a-45f2-b2af-49ba6b6e9144.png#averageHue=%23f3f2f1&clientId=uc406f69a-438f-4&from=paste&height=459&id=u0224d703&originHeight=574&originWidth=1636&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=362298&status=done&style=none&taskId=u978597a4-94f4-48e7-9530-597883e4f46&title=&width=1308.8)
+### 阿里云OSS
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431717905-dca04dc1-2e30-4043-a625-4ea727926405.png#averageHue=%23819558&clientId=uc406f69a-438f-4&from=paste&height=635&id=u41e83786&originHeight=794&originWidth=1549&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=468820&status=done&style=none&taskId=ub210f7fc-0303-46d2-9613-24f8f052d66&title=&width=1239.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431791047-6e3f7e26-f9d2-4415-9731-74a491791126.png#averageHue=%23f8f6f5&clientId=uc406f69a-438f-4&from=paste&height=578&id=u5c0c17c3&originHeight=722&originWidth=1585&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=170376&status=done&style=none&taskId=u833ea1af-317c-408e-aa3e-f5924a76bef&title=&width=1268)
+第三方服务-通用思路
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431847960-1fb11b21-1dcc-4b64-9038-57db697387e6.png#averageHue=%23ecdcd2&clientId=uc406f69a-438f-4&from=paste&height=626&id=u10264375&originHeight=782&originWidth=1561&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=199491&status=done&style=none&taskId=ua66579c6-cffc-4887-96c7-72d1de1cadd&title=&width=1248.8)
+### 阿里云OSS-准备工作
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701431893827-215be720-e858-4e76-8c75-a1dd15e96acb.png#averageHue=%23ecdcd0&clientId=uc406f69a-438f-4&from=paste&height=630&id=u10f48f2c&originHeight=787&originWidth=1561&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=309987&status=done&style=none&taskId=u95fd5de6-4c42-46de-a4a8-8ab37376d74&title=&width=1248.8)
+
+## 登录优化-redis
+### 问题：修改密码后，之前的令牌还可以使用
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432027881-f1ebcb70-f91b-4564-b6aa-024d08c28d81.png#averageHue=%23faf9f8&clientId=uc406f69a-438f-4&from=paste&height=607&id=u15069415&originHeight=759&originWidth=1507&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=170473&status=done&style=none&taskId=u06d5be34-c774-4473-a093-7facf7e048f&title=&width=1205.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432181104-c90ddc37-ffd6-47b7-9c1c-b7b14084af25.png#averageHue=%23f8f3f0&clientId=uc406f69a-438f-4&from=paste&height=598&id=u0ab952e0&originHeight=747&originWidth=1613&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=266949&status=done&style=none&taskId=u92211d29-11a2-44a0-8e43-3b4f062cb3f&title=&width=1290.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432212214-8e408a16-87b9-4df8-b1f5-808ba7cd59c6.png#averageHue=%23f0efef&clientId=uc406f69a-438f-4&from=paste&height=234&id=u49d00429&originHeight=292&originWidth=1513&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=107202&status=done&style=none&taskId=ufad2ef8c-7d1e-47a2-8674-ded855689ac&title=&width=1210.4)
+### SpringBoot集成redis
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432295110-8c4ab486-ceef-4f6a-94dc-cde54791d906.png#averageHue=%23f7f6f3&clientId=uc406f69a-438f-4&from=paste&height=615&id=uf62a867b&originHeight=769&originWidth=1466&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=340837&status=done&style=none&taskId=u5c78e81d-5dae-45f6-9f88-5d84fb299e6&title=&width=1172.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432311414-8425f147-1dc9-4ed1-9cdd-5c83d3e0f1fb.png#averageHue=%23fbfaf7&clientId=uc406f69a-438f-4&from=paste&height=138&id=u8fa68c62&originHeight=172&originWidth=735&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=57380&status=done&style=none&taskId=uee789cad-e8cc-4ad0-a047-22be793fc2d&title=&width=588)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432345019-c0cf0f52-5401-4e3d-b668-46b64cdde7a7.png#averageHue=%23f9f9f8&clientId=uc406f69a-438f-4&from=paste&height=443&id=ud7512144&originHeight=554&originWidth=1219&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=220096&status=done&style=none&taskId=u4b887ee2-a86d-416c-844c-4896b83476f&title=&width=975.2)
+@SpringBootTest注解
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432519812-8b57f11a-2e11-40cc-8b78-b594b77157d8.png#averageHue=%23f8f8f7&clientId=uc406f69a-438f-4&from=paste&height=685&id=u3370fa50&originHeight=856&originWidth=1395&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=438052&status=done&style=none&taskId=u0377199d-d468-44e0-a31f-1e76c66b4c1&title=&width=1116)
+启动redis服务
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432551781-1e34315a-85e6-4347-89a5-34a3eaa30544.png#averageHue=%23e6e2d7&clientId=uc406f69a-438f-4&from=paste&height=680&id=u892a8341&originHeight=850&originWidth=1464&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=472864&status=done&style=none&taskId=u8fbfc48f-ad27-474c-8123-4fd2faa9aa2&title=&width=1171.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432577601-fcc4cf47-8a24-4bdd-af1f-d7b608e05277.png#averageHue=%23444343&clientId=uc406f69a-438f-4&from=paste&height=577&id=u439f430e&originHeight=721&originWidth=1340&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=324912&status=done&style=none&taskId=u7edf8240-d2da-496c-a6d3-d17d99a1134&title=&width=1072)
+查看redis中的数据
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432608483-bc243b53-8cc9-451d-a4f9-2066882baeb7.png#averageHue=%23e5e1d9&clientId=uc406f69a-438f-4&from=paste&height=531&id=u55062c0f&originHeight=664&originWidth=1251&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=374525&status=done&style=none&taskId=uc82461c6-52e4-4aec-a024-2928acf1398&title=&width=1000.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432632360-9c607126-8490-44d4-afe7-ddc3ed28a1db.png#averageHue=%231a1a1a&clientId=uc406f69a-438f-4&from=paste&height=521&id=u671370ee&originHeight=651&originWidth=1237&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=71413&status=done&style=none&taskId=u7380ad50-f1ed-4569-890f-e4e8738fb64&title=&width=989.6)
+redis中获取一个键值对
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432869533-352494b0-9116-4614-9d91-c27cb1842716.png#averageHue=%23fbfbfb&clientId=uc406f69a-438f-4&from=paste&height=191&id=u94e0235a&originHeight=239&originWidth=966&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=67299&status=done&style=none&taskId=u23adf74f-fb45-4f51-b1e2-4aae745a29b&title=&width=772.8)
+redis设置过期时间
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432896609-fc64bcd0-e3ee-42c2-9090-221408693fb6.png#averageHue=%23efefed&clientId=uc406f69a-438f-4&from=paste&height=430&id=u97204b3b&originHeight=537&originWidth=1135&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=231761&status=done&style=none&taskId=u8993eb98-7c55-4cc9-a869-ef940d33f85&title=&width=908)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701432847004-15afd886-4025-4af3-9b78-69462f53128d.png#averageHue=%23161616&clientId=uc406f69a-438f-4&from=paste&height=490&id=u870d5584&originHeight=612&originWidth=1219&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=78755&status=done&style=none&taskId=u2e8ee1f3-6d0e-49e3-9ba5-406ee6d1d89&title=&width=975.2)
+### 令牌主动失效
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701433022656-f4eb599c-abcf-46d1-a173-62c536b762c9.png#averageHue=%23edecec&clientId=uc406f69a-438f-4&from=paste&height=245&id=u70fe4c79&originHeight=306&originWidth=1507&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=108966&status=done&style=none&taskId=ua1e39579-9ed0-48bf-a453-d1a110f8047&title=&width=1205.6)
+#### 修改UserController
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701433068304-6c83f501-5c38-4e67-9587-0bfcb4d8f2c1.png#averageHue=%23f4f4f3&clientId=uc406f69a-438f-4&from=paste&height=721&id=u81205033&originHeight=901&originWidth=1405&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=303557&status=done&style=none&taskId=u0d5443f9-7bf0-4ed3-81e2-2cb4ee0d710&title=&width=1124)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701433137648-af8182f1-ee64-4c9a-bf73-fe7443962ce9.png#averageHue=%23f8f8f6&clientId=uc406f69a-438f-4&from=paste&height=762&id=u688d0a97&originHeight=952&originWidth=1738&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=679248&status=done&style=none&taskId=u863ba1ee-14a3-49e3-84ff-96d93acf302&title=&width=1390.4)
+#### 修改拦截器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701433229718-4f293835-b21b-4b9d-aec0-1d89775792aa.png#averageHue=%23f2efe0&clientId=uc406f69a-438f-4&from=paste&height=761&id=ue5744121&originHeight=951&originWidth=1702&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=566487&status=done&style=none&taskId=u4ec34c17-4c54-4475-8331-4e7bb0683cb&title=&width=1361.6)
+#### 修改更新密码接口（删除旧token）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701433281393-2c77c969-08fe-45c4-b0c0-ea7a2ca5acc4.png#averageHue=%23f8f8f7&clientId=uc406f69a-438f-4&from=paste&height=762&id=u915f235b&originHeight=953&originWidth=1814&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=652622&status=done&style=none&taskId=uc97a806e-b954-41d0-991a-ac3362eb196&title=&width=1451.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701433339913-3a5d9cca-f3b4-4995-9bba-7777b50763a7.png#averageHue=%23f3f2f1&clientId=uc406f69a-438f-4&from=paste&height=698&id=uf28000a7&originHeight=873&originWidth=1701&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=535552&status=done&style=none&taskId=udc0eb485-a693-425d-be5a-8f3b2b07980&title=&width=1360.8)
+## SpringBoot项目部署
+开发好的项目部署在服务器上
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434320920-a2d12db7-f2cb-4469-984c-1c57232ed875.png#averageHue=%23f8f6f4&clientId=u2df1c87a-b7e4-4&from=paste&height=308&id=u06c4555a&originHeight=385&originWidth=1030&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=193725&status=done&style=none&taskId=u13fd8b9b-b062-4150-af5f-35fc771feed&title=&width=824)
+
+1. 配置打包插件
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434395635-02526984-0186-4376-960c-238f2a07ba7d.png#averageHue=%23fbfbfa&clientId=u2df1c87a-b7e4-4&from=paste&height=214&id=u2283dd0b&originHeight=267&originWidth=550&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=66266&status=done&style=none&taskId=u3a50e7dc-a47d-4d2d-9a06-ba18141213f&title=&width=440)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435069782-4dbdbe77-64e9-4c1a-9b7a-4691aeda4f21.png#averageHue=%23f6f6f6&clientId=u2df1c87a-b7e4-4&from=paste&height=463&id=uad660b26&originHeight=579&originWidth=580&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=81670&status=done&style=none&taskId=u174674f2-dcc5-4e4a-b401-e716c3e4df4&title=&width=464)
+
+2. 运行jar包
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434442737-00799e9e-fd2b-4f9a-8b92-30749c7e0940.png#averageHue=%23f5f3db&clientId=u2df1c87a-b7e4-4&from=paste&height=152&id=u6d4d52b7&originHeight=190&originWidth=288&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=49835&status=done&style=none&taskId=uc932bebe-e368-4a29-bf7e-d3e0abfd05a&title=&width=230.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434497935-57ab7607-21b0-478f-9340-74addd94c35c.png#averageHue=%23dbd8cf&clientId=u2df1c87a-b7e4-4&from=paste&height=246&id=u6db7c666&originHeight=307&originWidth=787&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=112520&status=done&style=none&taskId=u31db664d-8f35-41c6-96bc-d45cc807367&title=&width=629.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434563706-38786299-9db1-46bd-b861-c795f9f4dc35.png#averageHue=%231c1c1c&clientId=u2df1c87a-b7e4-4&from=paste&height=510&id=u98d35c54&originHeight=637&originWidth=1225&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=67017&status=done&style=none&taskId=u3a3944fa-235d-40e2-a556-df826b968c4&title=&width=980)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434573394-a2a4d19a-0fca-4ad2-b8fd-558d88f79d06.png#averageHue=%2349453f&clientId=u2df1c87a-b7e4-4&from=paste&height=516&id=u07f7736e&originHeight=645&originWidth=1227&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=683860&status=done&style=none&taskId=uc093a3a3-f577-4af5-a280-6f8f5403b5e&title=&width=981.6)
+
+3. 服务器要有JRE环境
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434598704-c4a1d3aa-bf8b-47aa-ba98-b105cc2b1ead.png#averageHue=%23f8f6f4&clientId=u2df1c87a-b7e4-4&from=paste&height=513&id=ufbe13a7e&originHeight=641&originWidth=1556&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=367786&status=done&style=none&taskId=u5aa0762c-90df-4b98-984d-38d95f440aa&title=&width=1244.8)
+小结
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434623604-0c2e0dc9-b1f9-47ce-9b84-a68101c985a8.png#averageHue=%23f4f4f4&clientId=u2df1c87a-b7e4-4&from=paste&height=341&id=ua24cbb33&originHeight=426&originWidth=641&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=46898&status=done&style=none&taskId=u98032620-b025-410a-a52c-5f0cd53404d&title=&width=512.8)
+## SpringBoot属性配置方式
+### 修改端口号
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434716874-68d5dafd-1c9f-4954-8b3f-68a8733def8f.png#averageHue=%23faf6ec&clientId=u2df1c87a-b7e4-4&from=paste&height=648&id=u0c66b820&originHeight=810&originWidth=1472&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=298779&status=done&style=none&taskId=u92cec65c-a7a2-48d9-b68b-d47d5a047fb&title=&width=1177.6)
+#### 命令行参数方式
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434757720-81c67afa-272e-4a88-8c15-98474cff3ed5.png#averageHue=%23787776&clientId=u2df1c87a-b7e4-4&from=paste&height=594&id=u333cc177&originHeight=742&originWidth=1501&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=678892&status=done&style=none&taskId=u0f34d9e9-062e-4a16-9a39-8ea74577545&title=&width=1200.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434764411-91c74ce5-5d1d-4e7b-b9cc-646a28491640.png#averageHue=%23a4a3a1&clientId=u2df1c87a-b7e4-4&from=paste&height=600&id=u8d8f7d37&originHeight=750&originWidth=1482&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=530282&status=done&style=none&taskId=u761f9bfd-7e07-4681-84f5-a519db29880&title=&width=1185.6)
+#### 环境变量方式（环境变量改变，命令行窗口需重启生效）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434798678-16e467e7-ad9c-47e6-adc7-a95c650d7ddc.png#averageHue=%23f4f4f3&clientId=u2df1c87a-b7e4-4&from=paste&height=510&id=ud5670ac9&originHeight=638&originWidth=1219&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=224446&status=done&style=none&taskId=ud5fa9211-5ff6-477e-a3dc-8fe7c54be88&title=&width=975.2)
+#### 外部配置方式
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701434897288-2dbed664-2b68-46e8-a29a-92f7e6683ae3.png#averageHue=%23fafaf9&clientId=u2df1c87a-b7e4-4&from=paste&height=534&id=ua7c6e832&originHeight=667&originWidth=1221&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=173745&status=done&style=none&taskId=u1730c218-2349-486e-95c3-eedd7c8a62f&title=&width=976.8)
+#### 配置优先级（从上往下依次变高）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435110717-dffb9710-6290-4afc-a396-f4a50c565a2f.png#averageHue=%23f3f1f1&clientId=u2df1c87a-b7e4-4&from=paste&height=308&id=u142fa0d1&originHeight=385&originWidth=891&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=70345&status=done&style=none&taskId=u3d62e3fa-b99c-4401-82ef-3a17b8c8768&title=&width=712.8)
+## 多环节开发-profiles
+多个环境使用不同数据库需要频繁修改
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435255322-2bd7011e-58b9-4d14-ae1b-d0544975b7ea.png#averageHue=%23fcf8d9&clientId=u2df1c87a-b7e4-4&from=paste&height=628&id=u1560baa4&originHeight=785&originWidth=1607&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=389674&status=done&style=none&taskId=ue93da4d7-6392-4985-aa58-4cfd218a2cd&title=&width=1285.6)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435274021-b2f2f8e7-6e1a-425c-822b-adb8763c0500.png#averageHue=%23faf7d9&clientId=u2df1c87a-b7e4-4&from=paste&height=617&id=u8447e0e0&originHeight=771&originWidth=1609&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=472480&status=done&style=none&taskId=ud288f876-46f1-44c7-869f-0ab0316eff1&title=&width=1287.2)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435314787-8e0293bf-8ccc-4c91-beea-56551459254e.png#averageHue=%23f9f8f4&clientId=u2df1c87a-b7e4-4&from=paste&height=569&id=ufb303a25&originHeight=711&originWidth=1409&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=198606&status=done&style=none&taskId=u62362549-eacd-4018-9faa-fea64afc022&title=&width=1127.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435490813-cbb793a8-ebc3-43eb-82ca-f39799ae626e.png#averageHue=%23bec7bf&clientId=u2df1c87a-b7e4-4&from=paste&height=677&id=u72b55446&originHeight=846&originWidth=1763&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=345697&status=done&style=none&taskId=u92746103-c596-4a9d-bda5-fdab9a189d2&title=&width=1410.4)
+指定生效的环境 active
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435460839-ab0064e5-e7c0-4a3e-a9fb-1f49a25ce17b.png#averageHue=%23efeeed&clientId=u2df1c87a-b7e4-4&from=paste&height=743&id=u756a6d11&originHeight=929&originWidth=1841&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=688245&status=done&style=none&taskId=u7569ea5c-3c0e-446f-9927-5d7c816ff25&title=&width=1472.8)
+共性的属性
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435553812-92fbd6b4-b16b-4e34-ae87-38c574ae2ab6.png#averageHue=%23f7f6f5&clientId=u2df1c87a-b7e4-4&from=paste&height=740&id=u9b7f4935&originHeight=925&originWidth=1867&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=692806&status=done&style=none&taskId=uee73a971-b4a4-4db3-9a0b-3f7da2f62b9&title=&width=1493.6)
+冲突时特定环境属性生效
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435627822-cb5f48c0-d4ea-4484-b390-693fb5d50ce1.png#averageHue=%23f7f7f5&clientId=u2df1c87a-b7e4-4&from=paste&height=523&id=ufc07ab80&originHeight=654&originWidth=1905&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=357487&status=done&style=none&taskId=u80a71886-77e8-4faa-b040-1726d82be90&title=&width=1524)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435594792-a4531c18-5f29-469c-98c5-42890ef6482b.png#averageHue=%23efefee&clientId=u2df1c87a-b7e4-4&from=paste&height=746&id=ua060868d&originHeight=933&originWidth=1900&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=715736&status=done&style=none&taskId=ue5d1f50e-e0bd-4c10-a82a-64d7edeccb4&title=&width=1520)
+### 多文件（）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435683363-79feef22-d864-4cda-b86e-f5ef397bf7b2.png#averageHue=%23faf7eb&clientId=u2df1c87a-b7e4-4&from=paste&height=641&id=ubf276166&originHeight=801&originWidth=1485&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=194071&status=done&style=none&taskId=u08c67420-da01-40c6-8b15-5f6a8ae5cf9&title=&width=1188)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435732792-5aded1ba-c3e8-4173-bc27-fefecce76cfc.png#averageHue=%23f4f4e7&clientId=u2df1c87a-b7e4-4&from=paste&height=456&id=ub31687d4&originHeight=570&originWidth=880&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=150984&status=done&style=none&taskId=u443885e3-45d6-432e-86d3-b79572461ad&title=&width=704)
+### 多环境开发-profiles 分组
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435788434-1198062c-3602-4648-9aed-b86fe45002cb.png#averageHue=%23faf6e7&clientId=u2df1c87a-b7e4-4&from=paste&height=637&id=udaf2a65b&originHeight=796&originWidth=1432&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=227672&status=done&style=none&taskId=ud02f9c16-b959-40cf-91a6-2374957e890&title=&width=1145.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701435878441-eff1e103-826c-4b3c-944f-d4282fb093b1.png#averageHue=%23f5f3e5&clientId=u2df1c87a-b7e4-4&from=paste&height=346&id=u0bf204e0&originHeight=433&originWidth=882&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=124165&status=done&style=none&taskId=uaa7eb20b-a0a8-4ea4-b1df-6b2331048d6&title=&width=705.6)
+## 前端项目开发
+
+### JavaScript-导入导出
+export import
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811107791-1261e3eb-02be-4728-9df5-a51a7ef99e24.png#averageHue=%23f9e9d7&clientId=u032e00a6-d257-4&from=paste&height=348&id=hyYOL&originHeight=435&originWidth=986&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=138398&status=done&style=none&taskId=u8673c20f-bd3b-4201-aed9-9f8a4f02dab&title=&width=788.8)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811207756-25839fc1-3c8a-4c86-be5d-dec97dcb9d52.png#averageHue=%23f8d5c6&clientId=u032e00a6-d257-4&from=paste&height=282&id=ucc686003&originHeight=353&originWidth=550&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=66791&status=done&style=none&taskId=uf6e41b70-a67d-4b94-8551-dd58cece7b6&title=&width=440)
+### Vue
+#### 快速入门
+
+#### 常用组件
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811445746-47c6cc0e-7399-4fa8-ae02-b96ce9e08179.png#averageHue=%23e8f4ea&clientId=u032e00a6-d257-4&from=paste&height=291&id=u7dbe4ad3&originHeight=364&originWidth=925&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=89145&status=done&style=none&taskId=u76620fa7-29a2-441c-a1dc-6fa5956574e&title=&width=740)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811502297-0d4f568c-1c4a-495b-a3b0-85d8b2a63313.png#averageHue=%23f7f7f7&clientId=u032e00a6-d257-4&from=paste&height=227&id=ub8cd77aa&originHeight=284&originWidth=810&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=44889&status=done&style=none&taskId=u05763b71-f18a-46a3-b022-d1a0344d6b9&title=&width=648)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811610898-fad47e44-7c90-40b1-bfd4-03c11a436391.png#averageHue=%23fbfafa&clientId=u032e00a6-d257-4&from=paste&height=377&id=u66683175&originHeight=471&originWidth=969&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=58120&status=done&style=none&taskId=u8d983fa1-9490-4caf-9658-ffff495be35&title=&width=775.2)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811721035-f046b356-63cf-42a1-a39e-28552b86bf60.png#averageHue=%23f5f4f4&clientId=u032e00a6-d257-4&from=paste&height=317&id=u969183fe&originHeight=396&originWidth=633&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=84415&status=done&style=none&taskId=ub026f277-01fb-4f19-8bab-128a9a9cbf3&title=&width=506.4)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811768646-c340d5b9-6b3b-4a9d-8976-7396a1578ce4.png#averageHue=%23f9f8f8&clientId=u032e00a6-d257-4&from=paste&height=241&id=u0b3f2c8f&originHeight=301&originWidth=610&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=38322&status=done&style=none&taskId=ue4305018-dfca-4a18-9755-e3b8fe89d94&title=&width=488)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811888805-1b9d4892-6e57-49cd-9a75-61c7b352b3a3.png#averageHue=%23f9f7f7&clientId=u032e00a6-d257-4&from=paste&height=391&id=ue2afb03f&originHeight=489&originWidth=979&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=148016&status=done&style=none&taskId=u297a0654-cc20-4a0f-a296-d95a8ae48d1&title=&width=783.2)
+#### Vue生命周期
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811948942-d06ae24e-5007-4ae2-9cd8-fb79653bec1f.png#averageHue=%23f2f1f1&clientId=u032e00a6-d257-4&from=paste&height=117&id=ue0821e69&originHeight=146&originWidth=953&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=39856&status=done&style=none&taskId=u80c05bd7-e376-4b32-8023-4fa0bcd5bae&title=&width=762.4)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811964677-60088234-b89f-44d3-a7ab-47983e9379e2.png#averageHue=%23fdfcfc&clientId=u032e00a6-d257-4&from=paste&height=621&id=uf9813bde&originHeight=776&originWidth=1554&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=262587&status=done&style=none&taskId=u762a2c31-2d43-4891-bc3a-ae9ce3b7c3e&title=&width=1243.2)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700811992443-ed49d0ed-7d9a-46a3-b953-4b73b9c59387.png#averageHue=%23f2f5d7&clientId=u032e00a6-d257-4&from=paste&height=367&id=u8e0cc881&originHeight=459&originWidth=981&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=181464&status=done&style=none&taskId=u1c15571b-140a-4c6b-ba5c-d7644d45500&title=&width=784.8)
+#### Axios
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812065086-8db6995c-ea30-4f1b-a3b0-eff816d3f8f3.png#averageHue=%23f7f7f7&clientId=u032e00a6-d257-4&from=paste&height=119&id=u3fa0de0b&originHeight=149&originWidth=616&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=27190&status=done&style=none&taskId=u62338922-2114-498d-ae43-0b7bedeeeac&title=&width=492.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812094151-324fed2c-188f-484c-8887-b5dc89a077d5.png#averageHue=%23faf8ee&clientId=u032e00a6-d257-4&from=paste&height=371&id=u0d54f625&originHeight=464&originWidth=1007&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=121014&status=done&style=none&taskId=ueafe7104-f332-4328-81fb-e0648ffa289&title=&width=805.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812234357-e04008ec-dc09-4910-8d41-4a0cd0b51fd4.png#averageHue=%23f2f1f1&clientId=u032e00a6-d257-4&from=paste&height=553&id=u5015451d&originHeight=691&originWidth=1121&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=266040&status=done&style=none&taskId=u6ee34557-a3bb-4fd6-9d9e-d47f28b04e4&title=&width=896.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812258297-ee287339-f096-4d84-8cfa-3c216b4cb98d.png#averageHue=%23f5f1ed&clientId=u032e00a6-d257-4&from=paste&height=196&id=u8da1fca6&originHeight=245&originWidth=921&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=112032&status=done&style=none&taskId=ua08bd02c-1a1c-433d-b0fd-c084966fa4c&title=&width=736.8)
+post请求
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812465977-7a2e20aa-30c6-4330-9240-4c6c5870808c.png#averageHue=%23fbfbfb&clientId=u032e00a6-d257-4&from=paste&height=346&id=u784742a2&originHeight=433&originWidth=951&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=137097&status=done&style=none&taskId=u5a0e9867-ba18-4cd4-a9d3-2832cd11941&title=&width=760.8)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812478694-ac02c39b-79ee-4bcb-8302-465e1dad277a.png#averageHue=%23f9f0e6&clientId=u032e00a6-d257-4&from=paste&height=366&id=u613bfe38&originHeight=457&originWidth=860&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=138351&status=done&style=none&taskId=ud4f7411e-7310-48d6-852f-611926c5306&title=&width=688)
+#### Axios-请求方式别名
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812502531-d9c94b9e-6dfa-469b-9a4c-2044678e55ee.png#averageHue=%23faf8e8&clientId=u032e00a6-d257-4&from=paste&height=383&id=u487760d7&originHeight=479&originWidth=885&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=164854&status=done&style=none&taskId=u90a09d20-ddf4-44a3-b019-74fac873d7c&title=&width=708)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812542493-3dd85a01-f8d5-440a-802d-f784164cbe1a.png#averageHue=%23fafaf9&clientId=u032e00a6-d257-4&from=paste&height=186&id=ua4d3c825&originHeight=233&originWidth=935&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=106309&status=done&style=none&taskId=u296912b0-6f7b-423d-891e-b42b9e2e63c&title=&width=748)
+
+### vue项目开发流程
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812889129-6f6ab8ee-ad6d-45f3-9e95-063d77afb9cb.png#averageHue=%23fbf9f9&clientId=u032e00a6-d257-4&from=paste&height=653&id=ue034f61c&originHeight=816&originWidth=1619&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=437665&status=done&style=none&taskId=u38ba635e-962b-402f-9ee5-275d409ac29&title=&width=1295.2)
+app.vue
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700812992491-98f16721-7294-4dd4-b8a4-740e64332e88.png#averageHue=%23f9f7cf&clientId=u032e00a6-d257-4&from=paste&height=391&id=u40a02a44&originHeight=489&originWidth=989&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=156517&status=done&style=none&taskId=u1fc97afd-e5eb-47f2-8b20-c0b1210c476&title=&width=791.2)
+
+
+响应式数据
+
+#### API风格![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813161860-8eec7264-7846-427f-8f69-2c9dd2d29371.png#averageHue=%23faf7db&clientId=u032e00a6-d257-4&from=paste&height=405&id=ucced3af5&originHeight=506&originWidth=974&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=223750&status=done&style=none&taskId=u3a501c45-9e01-4d38-adf5-60c3bed73fe&title=&width=779.2)
+组合式API
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813214938-19479c5f-59f5-4c94-8045-b7826a85bec3.png#averageHue=%23f8f7eb&clientId=u032e00a6-d257-4&from=paste&height=358&id=u9c02fe92&originHeight=447&originWidth=989&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=137995&status=done&style=none&taskId=u053a232b-788b-4e1e-9740-40ca8680f6f&title=&width=791.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813328354-999003db-f9cc-4912-aea9-7cdc62973c70.png#averageHue=%23fafafa&clientId=u032e00a6-d257-4&from=paste&height=370&id=u8d379880&originHeight=462&originWidth=808&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=153752&status=done&style=none&taskId=uf5337ccb-ab7b-4b02-ab6f-a68c1a91908&title=&width=646.4)
+### axios案例
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701134566942-19bc2a6d-71f4-4ccd-a140-a94664614e9f.png#averageHue=%23eeeded&clientId=u8d35ffe8-da20-4&from=paste&height=399&id=uc27805bf&originHeight=499&originWidth=809&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=196975&status=done&style=none&taskId=u3182673f-db47-4bfb-8ea0-03ccc0ba6b5&title=&width=647.2)
+
+1. 启动后台接口
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701134644054-3295056c-b393-423b-8906-2966462f5c02.png#averageHue=%23f5f4f3&clientId=u8d35ffe8-da20-4&from=paste&height=506&id=uf1796b40&originHeight=633&originWidth=1223&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=304921&status=done&style=none&taskId=u6c0b0308-74ab-462c-8375-188d16d12d8&title=&width=978.4)
+
+2. 创建Article.vue  在app.vue中使用
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701134728626-689225f4-85d2-4159-bb06-912d2162f3ad.png#averageHue=%23f2f2f2&clientId=u8d35ffe8-da20-4&from=paste&height=443&id=u76b0ebce&originHeight=554&originWidth=741&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=174011&status=done&style=none&taskId=ufc3e4313-8278-4426-aa36-5004cdcbd33&title=&width=592.8)
+
+3. 获取所有文章数据
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701134934045-5a8e4253-d83d-4dd3-a171-fe9048d27eb2.png#averageHue=%23f2f2f1&clientId=u8d35ffe8-da20-4&from=paste&height=362&id=uc22b19d5&originHeight=453&originWidth=608&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=135494&status=done&style=none&taskId=u510addf5-9e64-48ad-a557-ea2232deded&title=&width=486.4)
+
+4. 使用v-for指令，将数据渲染到表单上
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701134966680-bbe7aee4-1e6e-48bf-8774-ea883c10e04f.png#averageHue=%23eef1ee&clientId=u8d35ffe8-da20-4&from=paste&height=141&id=uca9abb29&originHeight=176&originWidth=366&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=65416&status=done&style=none&taskId=u364e6cd3-839e-4634-9aba-3fd4186034c&title=&width=292.8)
+
+5. 使用v-model指令完成表单数据的双向绑定
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135044206-a2d9201f-93c7-4e0c-8004-1f7ffb2a95ac.png#averageHue=%23fdfcfc&clientId=u8d35ffe8-da20-4&from=paste&height=228&id=u5f7f7f24&originHeight=285&originWidth=534&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=54897&status=done&style=none&taskId=u4960af14-ee44-4567-9900-14ec6784818&title=&width=427.2)
+
+6. 使用v-on指令为搜索按钮绑定单击事件
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135184093-02b1902f-7b87-4213-9bf0-8ae1318c59e4.png#averageHue=%23fbfafa&clientId=u8d35ffe8-da20-4&from=paste&height=214&id=ub1dcd0f0&originHeight=267&originWidth=929&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=83213&status=done&style=none&taskId=u1ebe0dd7-2ebc-42f4-aa01-c79a0c78e08&title=&width=743.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135204082-d09ad34e-c29f-474e-85bb-93b930b9f8c2.png#averageHue=%23fbfafa&clientId=u8d35ffe8-da20-4&from=paste&height=36&id=uc446abe3&originHeight=45&originWidth=413&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=9735&status=done&style=none&taskId=u590524fe-aa46-4ec1-96ca-173bd544149&title=&width=330.4)
+
+### 案例优化
+封装到js文件，重复使用
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135336160-09ca9843-cc6f-43f4-b7fa-5ca64a6ac9aa.png#averageHue=%23f7f5f1&clientId=u8d35ffe8-da20-4&from=paste&height=473&id=uc7248813&originHeight=591&originWidth=1537&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=195296&status=done&style=none&taskId=u68a9252d-9a5e-4d7f-b1a9-23c70caa8fb&title=&width=1229.6)
+封装为.js文件，函数传参和返回数据
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135512687-1b74d920-b4a4-4532-82bf-b7f2652b1342.png#averageHue=%23f2f2f1&clientId=u8d35ffe8-da20-4&from=paste&height=584&id=u02773e42&originHeight=730&originWidth=894&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=249749&status=done&style=none&taskId=u2a7653e1-5185-4a7d-bffe-76b31b249cc&title=&width=715.2)
+同步获取 async await
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135797408-c19dc91d-b5b2-4a20-baa4-535bdb918c2f.png#averageHue=%23f8f8f7&clientId=u8d35ffe8-da20-4&from=paste&height=255&id=ue2345050&originHeight=319&originWidth=711&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=112253&status=done&style=none&taskId=u1b7cf85d-4693-47e3-8f6d-b722c99d2cd&title=&width=568.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135777100-2b704362-65e2-4f56-910e-becd444c66ea.png#averageHue=%23e6ead9&clientId=u8d35ffe8-da20-4&from=paste&height=170&id=u8a750fda&originHeight=213&originWidth=620&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=84556&status=done&style=none&taskId=u43edd81f-2bc3-4543-abd2-424dc894549&title=&width=496)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135902159-26424424-de67-409c-b2ad-16e0a27d50dd.png#averageHue=%23fbfbfa&clientId=u8d35ffe8-da20-4&from=paste&height=230&id=ue204f0c4&originHeight=287&originWidth=968&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=99954&status=done&style=none&taskId=uf3dc8cad-1b13-44dc-a7a8-7562c2a7d74&title=&width=774.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135915355-b4a157df-d4c4-4e61-9fc4-80c602affd02.png#averageHue=%23fbfbfa&clientId=u8d35ffe8-da20-4&from=paste&height=154&id=uab4a556d&originHeight=192&originWidth=774&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=57155&status=done&style=none&taskId=uc3cb4304-eeb3-46c2-ba01-64aec6e32f6&title=&width=619.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701135945782-4210df88-6d43-4f80-b95d-3706ed99b9d7.png#averageHue=%23f9f1f1&clientId=u8d35ffe8-da20-4&from=paste&height=126&id=u51e4a96e&originHeight=157&originWidth=1531&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=43791&status=done&style=none&taskId=u2a0a8a7d-9d75-4d88-bcd4-4e40cf8f63e&title=&width=1224.8)
+优化url公共前缀，baseurl
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136005684-34ec3692-276d-4bac-865e-86cc250892ae.png#averageHue=%23faf9f7&clientId=u8d35ffe8-da20-4&from=paste&height=348&id=u1e6f86b8&originHeight=435&originWidth=1029&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=207389&status=done&style=none&taskId=u7f3e3de7-f986-4679-a3ff-ec7e273ace9&title=&width=823.2)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136083781-b73f0666-56cc-4a51-a542-753ac719f3f9.png#averageHue=%23f6f5f5&clientId=u8d35ffe8-da20-4&from=paste&height=614&id=uad95d825&originHeight=767&originWidth=1024&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=314192&status=done&style=none&taskId=u05997a70-9de3-4e09-9f52-ef4bfdfee05&title=&width=819.2)
+### 案例优化2 request.js
+请求内容相似
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136208253-a99056c5-5180-4375-a424-122a5fc39cbb.png#averageHue=%23fbfafa&clientId=u8d35ffe8-da20-4&from=paste&height=361&id=u91d04512&originHeight=451&originWidth=847&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=159806&status=done&style=none&taskId=uebaf83b0-d089-477a-b1f2-8fc8d745454&title=&width=677.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136270899-d6801b82-3443-400b-9c5a-dbbd847aa549.png#averageHue=%23f8efe7&clientId=u8d35ffe8-da20-4&from=paste&height=382&id=u836c4fc9&originHeight=478&originWidth=1005&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=95870&status=done&style=none&taskId=u1afdcd17-0cc0-41f1-9464-73d613b2198&title=&width=804)
+响应拦截器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136310135-ffe4cdcc-c58a-4a2e-80c8-db9112f474c3.png#averageHue=%23f9f7f6&clientId=u8d35ffe8-da20-4&from=paste&height=321&id=u71394721&originHeight=401&originWidth=476&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=103359&status=done&style=none&taskId=u5bc3eb73-4f2c-4ebe-bad4-1b3f1e02325&title=&width=380.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136424872-3f98d226-eaed-4bdb-a752-ed169cac5156.png#averageHue=%23f2f1f1&clientId=u8d35ffe8-da20-4&from=paste&height=452&id=ua1e62f14&originHeight=565&originWidth=697&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=173082&status=done&style=none&taskId=u3c3830e0-d846-4384-981e-d3b6e5030c2&title=&width=557.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136504372-b270bea2-fbfe-4fd6-859b-21099bcb30a7.png#averageHue=%23f3f3f2&clientId=u8d35ffe8-da20-4&from=paste&height=274&id=u43bb85c6&originHeight=343&originWidth=590&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=108871&status=done&style=none&taskId=u6f33b1e9-c7ac-462b-aa97-947e52677c6&title=&width=472)
+api中的async和await不需要使用，.vue文件中有即可
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136549608-64d35850-aea2-4297-98a1-c437ea579889.png#averageHue=%23f4f4f3&clientId=u8d35ffe8-da20-4&from=paste&height=260&id=ube4a94a1&originHeight=325&originWidth=497&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=101904&status=done&style=none&taskId=u04d7913d-a41e-4d74-bf80-ad7235583a4&title=&width=397.6)
+### Element-plus
+#### icon图标使用
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136809582-1c27df1a-4848-42b4-85e9-4b3a071f5f6e.png#averageHue=%23dfd9d4&clientId=u8d35ffe8-da20-4&from=paste&height=84&id=u7f05a324&originHeight=105&originWidth=250&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=20138&status=done&style=none&taskId=u023a47c9-cdbc-48a6-8f04-9ceb3ea180b&title=&width=200)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701136793624-60db69aa-d9fb-4afb-bd27-433fb03d6e7b.png#averageHue=%23f4efea&clientId=u8d35ffe8-da20-4&from=paste&height=59&id=ue76d4bc1&originHeight=74&originWidth=402&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=25661&status=done&style=none&taskId=uba1aedcc-0ddb-44d0-92aa-ddffbe680f8&title=&width=321.6)
+#### 分页条使用
+
+# 大事件
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813449624-8d1c4501-290c-4f7c-92e4-f83341bd25a2.png#averageHue=%23f8f5f5&clientId=u032e00a6-d257-4&from=paste&height=306&id=u768bce14&originHeight=382&originWidth=981&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=75405&status=done&style=none&taskId=u0eb77a20-ed80-43aa-a62e-2fdc543d48c&title=&width=784.8)
+
+## 环境准备
+sass css的扩展包
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813508279-8a397f4e-563b-4ad8-8bef-44a8b73800dc.png#averageHue=%23f9f9f9&clientId=u032e00a6-d257-4&from=paste&height=377&id=u972f08ef&originHeight=471&originWidth=610&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=71446&status=done&style=none&taskId=u5e075d19-3038-4e87-b7e0-6c72d753c94&title=&width=488)
+导入element-plus
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813627174-0d4b87a8-8aff-4422-9e01-ad74b74396ea.png#averageHue=%23f4f3f3&clientId=u032e00a6-d257-4&from=paste&height=317&id=u076e6323&originHeight=396&originWidth=500&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=91160&status=done&style=none&taskId=u1107e21c-4641-4846-a872-0c5284547c5&title=&width=400)
+目录调整
+资料中的request.js导入utils包
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813803749-52ce5821-5182-49f3-8208-a01f9aa968fc.png#averageHue=%23e5e5e4&clientId=u032e00a6-d257-4&from=paste&height=50&id=ufd24c596&originHeight=62&originWidth=269&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=10924&status=done&style=none&taskId=ucc29511c-2afc-4baa-bd70-c58c53f9cf0&title=&width=215.2)
+
+## 前端工程开发步骤
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700813881934-25e910f9-19a0-4449-b46b-50dcda6999cf.png#averageHue=%23fcfcfc&clientId=u032e00a6-d257-4&from=paste&height=330&id=udcc48f15&originHeight=412&originWidth=988&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=57938&status=done&style=none&taskId=u9d132ea8-5290-4eda-9b17-a9baf61a098&title=&width=790.4)
+
+## 注册页面
+定义数据模型registerData
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700814156613-68e34921-7e93-4b15-9f00-e03bca675bd9.png#averageHue=%23f1f1f1&clientId=u032e00a6-d257-4&from=paste&height=238&id=u5bcbf839&originHeight=298&originWidth=1480&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=169241&status=done&style=none&taskId=udbbe0325-3bd2-42a2-972d-85e6244acdd&title=&width=1184)
+v-model绑定数据
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700814244119-3da59754-c411-4743-b3e4-6f01e34d1ba6.png#averageHue=%23f9f8f7&clientId=u032e00a6-d257-4&from=paste&height=262&id=u4e4325e9&originHeight=327&originWidth=1230&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=187398&status=done&style=none&taskId=u1072f840-62c7-4fd4-b5ce-67d5adc132e&title=&width=984)
+表单校验
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700814877592-d313ede7-0770-45e5-ad1a-9d3277e7ad63.png#averageHue=%23faf9f9&clientId=u032e00a6-d257-4&from=paste&height=236&id=u4d74721f&originHeight=295&originWidth=669&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=130000&status=done&style=none&taskId=u98a0523a-00ab-452c-ae53-bf889fbd5dd&title=&width=535.2)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700815009148-8f27af6d-4e12-49d5-8424-f722768dee5f.png#averageHue=%23e2dfd8&clientId=u032e00a6-d257-4&from=paste&height=174&id=u889e7043&originHeight=218&originWidth=503&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=81589&status=done&style=none&taskId=u70aa057c-0f0a-4dba-8d27-e1742fae5dd&title=&width=402.4)
+绑定到表单
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700815082255-7b6034a1-d8a5-4ab6-b979-6805413396e7.png#averageHue=%23e9e2dc&clientId=u032e00a6-d257-4&from=paste&height=250&id=uf42524a5&originHeight=313&originWidth=930&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=198017&status=done&style=none&taskId=ue28a895d-f8e3-435a-81db-49d97fd3ae1&title=&width=744)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700815435728-8d5ffb1b-b15f-4cc6-b579-c9552f506564.png#averageHue=%23f6f6ed&clientId=u032e00a6-d257-4&from=paste&height=319&id=ubde67de9&originHeight=399&originWidth=748&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=100598&status=done&style=none&taskId=ueffeec4a-5210-4edc-8bf4-93eeda6c286&title=&width=598.4)
+## 注册接口调用
+参照接口文档，封装api
+
+1. 导入request.js请求工具
+
+2. 提供调用注册接口的函数
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700829486864-74a71926-a868-41fa-b241-f372ecc2c54b.png#averageHue=%23e6e6e5&clientId=u51aa3197-0d4b-4&from=paste&height=314&id=u334dcb70&originHeight=393&originWidth=591&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=149056&status=done&style=none&taskId=u88b472f8-6552-4791-8a8d-0e65802b1fb&title=&width=472.8)
+
+3. 调用后台接口
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700829709316-c5149ab6-3448-4920-ab45-57e04d81ebf5.png#averageHue=%23efede4&clientId=u51aa3197-0d4b-4&from=paste&height=247&id=u853fb5dc&originHeight=309&originWidth=676&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=129621&status=done&style=none&taskId=ud34bbe7f-550b-4e05-b1ef-b9d42a051cb&title=&width=540.8)
+
+## 跨域问题
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700829911417-865c8041-f710-4301-a4a5-57492eb666a6.png#averageHue=%23faf2ef&clientId=u51aa3197-0d4b-4&from=paste&height=371&id=ub3ce05d0&originHeight=464&originWidth=778&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=132515&status=done&style=none&taskId=u2dd41c91-61eb-4b17-a92b-c205f9a7d8e&title=&width=622.4)
+配置代理
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700829953225-b2f89aad-e5a4-4d6c-809a-3daa84cfea6f.png#averageHue=%23faf5f2&clientId=u51aa3197-0d4b-4&from=paste&height=376&id=u91b6848a&originHeight=470&originWidth=901&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=142004&status=done&style=none&taskId=u2fe552d1-a6b4-42f9-b0f9-9989474dee3&title=&width=720.8)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700830060002-98dfbbe6-5216-4cde-bb96-f27b1b05e5aa.png#averageHue=%23f9f5d9&clientId=u51aa3197-0d4b-4&from=paste&height=394&id=uaeda13f8&originHeight=493&originWidth=939&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=170355&status=done&style=none&taskId=ue99f58e2-bc09-497b-9941-2b7f0eccd09&title=&width=751.2)
+举例
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700830109088-e5d5a28b-e001-4480-b826-ff8d9f404c82.png#averageHue=%23e1ece5&clientId=u51aa3197-0d4b-4&from=paste&height=37&id=u7085c346&originHeight=46&originWidth=350&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=12066&status=done&style=none&taskId=ucebd77c9-5149-4567-ba40-f29a456481e&title=&width=280)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700830120720-a37038ec-c6aa-464a-8896-2ea558c242e1.png#averageHue=%23e1ece5&clientId=u51aa3197-0d4b-4&from=paste&height=41&id=u0663a056&originHeight=51&originWidth=311&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=12657&status=done&style=none&taskId=u3a02d118-43e2-4c00-be02-01ab74b0652&title=&width=248.8)
+'/api'替换为''
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700830136183-e0f681f2-8148-4a58-a6f2-bd30a8f9d9a0.png#averageHue=%23f9f2d4&clientId=u51aa3197-0d4b-4&from=paste&height=381&id=u8bced351&originHeight=476&originWidth=947&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=190854&status=done&style=none&taskId=u88471adf-3a2e-4c47-9569-d428743db1f&title=&width=757.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701171752780-dc8ff23c-ab7c-49ea-bb84-d86cfed1cbf5.png#averageHue=%23f4f3f3&clientId=u42d1c075-addf-4&from=paste&height=622&id=ubdbdeb8c&originHeight=778&originWidth=850&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=234326&status=done&style=none&taskId=u252f9e6c-a522-43cf-bfb4-0e0a905a3d4&title=&width=680)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701171639309-72570850-e4be-437b-9072-c1d624315760.png#averageHue=%23f6f4eb&clientId=u42d1c075-addf-4&from=paste&height=544&id=u09788d96&originHeight=680&originWidth=1402&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=250750&status=done&style=none&taskId=ue06cbba8-03d3-42c1-9032-a9e09814aa6&title=&width=1121.6)
+## 登录
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701137367430-39253a8c-9e64-46dd-bdbc-df8acc257142.png#averageHue=%23e2e6d7&clientId=u8d35ffe8-da20-4&from=paste&height=50&id=u8aaed6b6&originHeight=62&originWidth=230&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=15981&status=done&style=none&taskId=u278bafb7-2732-4a9f-b9b3-f99eabe7cb8&title=&width=184)
+### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701516156804-ecc1de32-adbf-4ecf-8188-d9ae7b048be9.png#averageHue=%23fafafa&clientId=uc8065b42-6828-4&from=paste&height=556&id=ud4122a4d&originHeight=695&originWidth=1024&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=175906&status=done&style=none&taskId=uec56c414-fc21-4e44-9ab7-2a0f349952e&title=&width=819.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701516175825-594f6700-5ccf-4ecc-bfcb-9b6edf04e0cb.png#averageHue=%23f9f9f9&clientId=uc8065b42-6828-4&from=paste&height=334&id=u43045cff&originHeight=418&originWidth=1038&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=121161&status=done&style=none&taskId=u8133c3ab-cb9b-4eea-949c-9e2c5427795&title=&width=830.4)
+### user.js
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701516254989-44d4f17d-dd7c-4c24-a86c-d64449b0dde6.png#averageHue=%23f7f7f6&clientId=uc8065b42-6828-4&from=paste&height=530&id=u751fe688&originHeight=663&originWidth=1025&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=309914&status=done&style=none&taskId=u79959820-bd71-41f6-9cea-1fc7d611a04&title=&width=820)
+### login()函数
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701516338133-23572c4b-6094-4ed5-a4f3-19cff76bc341.png#averageHue=%23fbfbfa&clientId=uc8065b42-6828-4&from=paste&height=279&id=u02dc000a&originHeight=349&originWidth=779&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=111161&status=done&style=none&taskId=u15a6bffa-02ef-448d-a365-fd02d03d28f&title=&width=623.2)	
+### login-form
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701516380044-14ed9418-76a0-457b-a830-3d27ffa98984.png#averageHue=%23faf9f8&clientId=uc8065b42-6828-4&from=paste&height=407&id=u06ff8a08&originHeight=509&originWidth=1285&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=255515&status=done&style=none&taskId=ua88d3e2b-438f-4551-b72e-3cd4c42b918&title=&width=1028)
+## 优化axios响应拦截器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701517012500-f6c87672-93f3-46bb-8d5d-f5fc1ffc8b13.png#averageHue=%23fce8ce&clientId=u3442ff49-b6bb-4&from=paste&height=634&id=u066c6db8&originHeight=792&originWidth=1580&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=473942&status=done&style=none&taskId=ub1a7df42-5b43-41fd-b718-cb2b170bec0&title=&width=1264)
+request.js
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701517039822-7ea95ba0-a0d9-49f5-8c46-d228df4f7288.png#averageHue=%23f8f8f8&clientId=u3442ff49-b6bb-4&from=paste&height=662&id=ua4357e5d&originHeight=828&originWidth=1049&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=382845&status=done&style=none&taskId=ub24431ea-c3fa-4222-8895-77ffec8cb71&title=&width=839.2)
+login.vue修改
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701517074808-b93114b8-1606-43bd-8121-afac31fac1d4.png#averageHue=%23fafaf9&clientId=u3442ff49-b6bb-4&from=paste&height=621&id=uc540296c&originHeight=776&originWidth=817&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=299539&status=done&style=none&taskId=uc6034ea0-ded9-40e9-9d66-e6fecb3dada&title=&width=653.6)
+### 使用element-plus  message优化
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701517140420-7ea655b3-a632-4bbc-bca0-ed85cad36cb4.png#averageHue=%23f4f4f3&clientId=u3442ff49-b6bb-4&from=paste&height=714&id=u1d3dc835&originHeight=893&originWidth=884&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=307333&status=done&style=none&taskId=uf1fc1640-2857-4e43-b68e-005c991490d&title=&width=707.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701517151084-2a3a9585-b902-4eb8-b3cc-67ea76efbeb9.png#averageHue=%23fafafa&clientId=u3442ff49-b6bb-4&from=paste&height=511&id=ud9733ee6&originHeight=639&originWidth=852&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=243041&status=done&style=none&taskId=u9703882a-6bcd-4961-bcdf-d30323cf9df&title=&width=681.6)
+
+
+## 路由
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700830703090-2ace4015-04f3-4c32-8057-0226476fdb3f.png#averageHue=%23f4f4f4&clientId=u51aa3197-0d4b-4&from=paste&height=358&id=u347855e9&originHeight=447&originWidth=919&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=117476&status=done&style=none&taskId=u4fdb2e66-b948-412e-8496-39c5a4d7d55&title=&width=735.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700831041109-fc7856f2-f38d-4e00-9804-47dbded44497.png#averageHue=%23f8f6e5&clientId=u51aa3197-0d4b-4&from=paste&height=391&id=u22e2390a&originHeight=489&originWidth=964&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=193588&status=done&style=none&taskId=uda536766-1c2e-4131-bec9-502a7feafa6&title=&width=771.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700833030372-6c81fa73-9b42-4ae4-b818-a76037fba27c.png#averageHue=%23f3f3f3&clientId=u51aa3197-0d4b-4&from=paste&height=434&id=ub732dd6e&originHeight=543&originWidth=796&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=149069&status=done&style=none&taskId=u9a7d239f-c54d-463d-a49e-0852dd1a29c&title=&width=636.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700833077529-85ac48f1-7781-4a0f-91f4-75777773c5d2.png#averageHue=%23e8e3dc&clientId=u51aa3197-0d4b-4&from=paste&height=306&id=u664ecb62&originHeight=383&originWidth=420&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=88098&status=done&style=none&taskId=u0d1541f8-eaf8-49d0-9d8b-322fc130523&title=&width=336)
+声明
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700833370009-19f75df9-986c-4baa-baaa-87ede82cce51.png#averageHue=%23f9f9f8&clientId=u51aa3197-0d4b-4&from=paste&height=365&id=ua08da257&originHeight=456&originWidth=651&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=171279&status=done&style=none&taskId=u7c762692-4822-40a1-976c-d0cbc1743d4&title=&width=520.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1700833408726-7f9a4a28-19f4-46d2-9ae4-ce9f528154dd.png#averageHue=%23f4f3eb&clientId=u51aa3197-0d4b-4&from=paste&height=440&id=ub352d015&originHeight=550&originWidth=1002&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=186826&status=done&style=none&taskId=u0cc285a8-9de3-4e7f-b022-6376c09afcd&title=&width=801.6)
+### 子路由
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701334669313-36e36f1e-9bb5-40fd-8e3c-0a3fe2dd9786.png#averageHue=%23f8f8f8&clientId=u3a7ab420-fb0e-4&from=paste&height=471&id=ua7f714ef&originHeight=589&originWidth=653&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=211524&status=done&style=none&taskId=u43f4dba8-a60c-4f91-8878-f5d03aedb8c&title=&width=522.4)
+element-plus中menu的index可实现路由跳转
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701334685245-9338d9e1-37ef-4b0f-b079-e692c0756f99.png#averageHue=%23fbfbfa&clientId=u3a7ab420-fb0e-4&from=paste&height=336&id=u1b5e29a1&originHeight=420&originWidth=464&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=85174&status=done&style=none&taskId=u2d754f9c-8906-4f19-add5-74b261a998c&title=&width=371.2)
+## 文章分类列表查询
+### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701334894689-43b69fcc-0130-4cc4-8e5a-8d15f1072300.png#averageHue=%23f9f8f8&clientId=u3a7ab420-fb0e-4&from=paste&height=466&id=u9a39a548&originHeight=582&originWidth=779&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=84675&status=done&style=none&taskId=ua67662e7-b1cc-4428-be02-0c16f733f96&title=&width=623.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335310924-dd6de7e8-3e85-4a69-8bd3-08f60c89c945.png#averageHue=%23f1f1f0&clientId=u3a7ab420-fb0e-4&from=paste&height=745&id=u03b843b3&originHeight=931&originWidth=1459&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=382782&status=done&style=none&taskId=u4e661164-2407-49a4-b553-0b1ce0dc57e&title=&width=1167.2)
+### article.js
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701334996443-d7d8c274-3b6d-4a49-8386-ca51d011a6ee.png#averageHue=%23e7e7e7&clientId=u3a7ab420-fb0e-4&from=paste&height=382&id=u29b588f2&originHeight=478&originWidth=917&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=156515&status=done&style=none&taskId=u68b6017b-85eb-4d6d-91e1-c40db0a6a96&title=&width=733.6)
+### 声明一个异步函数（页面第一次加载时需要显示文章）
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335141858-ee97f473-7687-4474-b979-320e8ca68f04.png#averageHue=%23f6f5f5&clientId=u3a7ab420-fb0e-4&from=paste&height=738&id=u969fff42&originHeight=922&originWidth=1875&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=582633&status=done&style=none&taskId=u2b41a494-07c8-487a-987c-c5cbf7e8183&title=&width=1500)
+### 需要携带token
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335211111-279d2d37-1d55-4a04-a849-d0f94b61160c.png#averageHue=%23f8f0d8&clientId=u3a7ab420-fb0e-4&from=paste&height=486&id=u2c8cc013&originHeight=608&originWidth=1917&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=304798&status=done&style=none&taskId=u42ea621f-a980-41af-9e10-d809317de73&title=&width=1533.6)
+## pinia状态管理库
+### 问题：调用后台接口没有携带token,报错401。需要用到token，可是token目前在后端redis中
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701436269920-67d75626-d746-4bab-8583-b74a6e1a6da4.png#averageHue=%23c7cec5&clientId=u2df1c87a-b7e4-4&from=paste&height=98&id=ub0082e37&originHeight=123&originWidth=1918&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=75569&status=done&style=none&taskId=ucfe90bc8-04c3-4aa7-994a-7b032adf39e&title=&width=1534.4)
+### vue的pinia状态管理库
+login接口把token传递到pinia
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335379137-26d6ab4a-d560-4bc2-b249-44dcaf0d7458.png#averageHue=%23f8f8f8&clientId=u3a7ab420-fb0e-4&from=paste&height=646&id=ub5ddfd4c&originHeight=808&originWidth=1370&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=107534&status=done&style=none&taskId=u0bc80692-f977-4657-97b3-0e890fe5433&title=&width=1096)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335391017-ecb51a2f-253f-4bcf-98eb-e457f930dca7.png#averageHue=%23f5e8dc&clientId=u3a7ab420-fb0e-4&from=paste&height=638&id=ue492f359&originHeight=797&originWidth=1497&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=152595&status=done&style=none&taskId=u2d5e80fb-b64d-4d39-b179-2c6e90f83e1&title=&width=1197.6)![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335428456-5a15d8ea-a8a9-4c0c-932f-583a2e4a7cfc.png#averageHue=%23e28c37&clientId=u3a7ab420-fb0e-4&from=paste&height=623&id=u71cc4668&originHeight=779&originWidth=1384&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=169924&status=done&style=none&taskId=u86d1098b-b525-4197-ae9c-2121e8aa034&title=&width=1107.2)
+### 使用步骤
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335521044-5d69587c-7012-48ae-8f08-b3545d90c522.png#averageHue=%23fbf8d7&clientId=u3a7ab420-fb0e-4&from=paste&height=650&id=uf82d9bc3&originHeight=812&originWidth=1603&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=582595&status=done&style=none&taskId=uc02e29dc-d4fe-4bcc-85d6-dcadaeb56d3&title=&width=1282.4)
+#### npm install pinia
+#### main.js中使用pinia
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335677471-96b8226d-66ed-4d7a-853b-f19a2978e6e9.png#averageHue=%23faf9f9&clientId=u3a7ab420-fb0e-4&from=paste&height=422&id=u90c5ce6f&originHeight=527&originWidth=582&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=128098&status=done&style=none&taskId=ua561acd0-5654-4ec3-a969-af55116dd1b&title=&width=465.6)
+#### 创建src/stores/token.js
+一般命名为use...store
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335794064-0c57dca7-2761-4925-986c-afca1b928c2e.png#averageHue=%23f9f9f8&clientId=u3a7ab420-fb0e-4&from=paste&height=630&id=u758e32b0&originHeight=787&originWidth=1097&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=319090&status=done&style=none&taskId=uf15be3be-1ae4-4f8e-9e1d-e3fc416f164&title=&width=877.6)
+#### 在组件中使用login.vue(存储token)、
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335862067-162a1da8-8c87-4eb4-9dbd-ac6f0bb14f90.png#averageHue=%23f2f2f1&clientId=u3a7ab420-fb0e-4&from=paste&height=679&id=u13d5ba80&originHeight=849&originWidth=935&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=360822&status=done&style=none&taskId=u5e920daa-7aed-48a6-b0ea-74f2e2316c4&title=&width=748)
+在文章分类列表查询请求中携带token
+tokenStore.value无需使用
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335952253-474643d0-665b-4cf7-9a1e-2245bb76faef.png#averageHue=%23e7e7e6&clientId=u3a7ab420-fb0e-4&from=paste&height=288&id=u59dd93cb&originHeight=360&originWidth=926&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=155483&status=done&style=none&taskId=u93139109-834f-4040-bea8-da815a09931&title=&width=740.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701335997090-65e0ebec-7db8-4b36-9ec3-e33d95f6d40b.png#averageHue=%23f7f5ef&clientId=u3a7ab420-fb0e-4&from=paste&height=470&id=uf0701174&originHeight=588&originWidth=1633&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=282931&status=done&style=none&taskId=ue032f8fb-e323-445c-87df-8796fb9bb46&title=&width=1306.4)
+## axios请求拦截器
+使用token写headers繁琐
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437347171-5714e279-b3ac-49b9-ad9b-fae5b28c934c.png#averageHue=%23f8f7f7&clientId=u2df1c87a-b7e4-4&from=paste&height=470&id=u1696dc3a&originHeight=588&originWidth=1229&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=258079&status=done&style=none&taskId=uc96985a6-e457-409b-b8ed-58fd6d28cfd&title=&width=983.2)
+添加请求拦截器
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437402362-11d0ec70-0873-4ef6-8d59-275f25eada85.png#averageHue=%23f9f8e5&clientId=u2df1c87a-b7e4-4&from=paste&height=611&id=uf88b9287&originHeight=764&originWidth=952&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=213506&status=done&style=none&taskId=u0a0bd05d-f7f2-44ce-8ee5-1517015efa8&title=&width=761.6)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437551733-14b67c1a-f983-44c0-bdc8-3f1fb67a17c5.png#averageHue=%23f8f8f8&clientId=u2df1c87a-b7e4-4&from=paste&height=749&id=u1f99d33d&originHeight=936&originWidth=1148&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=421612&status=done&style=none&taskId=u738113a2-3670-4c32-8962-955c4820721&title=&width=918.4)
+修改article api接口
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437590149-ecdb809a-69d4-4200-b43b-2d70d5d036e3.png#averageHue=%23f2f2f2&clientId=u2df1c87a-b7e4-4&from=paste&height=412&id=u476460e9&originHeight=515&originWidth=1293&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=237169&status=done&style=none&taskId=u8eecb1d1-9f32-4e24-831d-98404186a7c&title=&width=1034.4)
+## pinia持久化插件-persist
+### 问题：刷新后获取不到数据
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437688181-162263ac-4d74-418d-9ea5-d08741e20896.png#averageHue=%23dbdbdb&clientId=u2df1c87a-b7e4-4&from=paste&height=864&id=u9fe4bb96&originHeight=1080&originWidth=1920&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=260995&status=done&style=none&taskId=uc499836c-3c7e-46f0-9141-39f87ff7977&title=&width=1536)
+### persist
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437733844-4e25c561-4507-49e3-92f3-03e17f7e32d9.png#averageHue=%23f7f4f4&clientId=u2df1c87a-b7e4-4&from=paste&height=170&id=u84c0135f&originHeight=213&originWidth=871&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=94767&status=done&style=none&taskId=udbccce08-fc2f-4c19-96b7-0ff362131b0&title=&width=696.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437789098-aa3aa672-5ce2-4347-b25a-9169b7ea15f9.png#averageHue=%23faf9f4&clientId=u2df1c87a-b7e4-4&from=paste&height=598&id=u371e25cd&originHeight=748&originWidth=1529&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=319934&status=done&style=none&taskId=u3414e328-47f5-4987-b900-0aab5ef82e2&title=&width=1223.2)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437940284-c1638174-30fa-4bb5-ac16-8f812e8cd452.png#averageHue=%23eeeeee&clientId=u2df1c87a-b7e4-4&from=paste&height=862&id=u416b3160&originHeight=1078&originWidth=1920&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=498573&status=done&style=none&taskId=u94aa20bb-86cc-4a9b-a49a-9094b47f694&title=&width=1536)
+
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701437917031-448fb8cf-9163-42c8-b573-029bbfa9fcd9.png#averageHue=%23ededed&clientId=u2df1c87a-b7e4-4&from=paste&height=603&id=ubaac742a&originHeight=754&originWidth=1234&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=300998&status=done&style=none&taskId=u86791dc9-1258-4827-9a38-15caa91f2be&title=&width=987.2)
+## 未登录统一处理
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701767887748-54b65459-af9e-46d3-adf2-237206a44c8e.png#averageHue=%23faf9f9&clientId=u65b95c61-75c3-4&from=paste&height=492&id=u2e378868&originHeight=615&originWidth=738&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=262281&status=done&style=none&taskId=ueea376b5-5372-46ab-8545-5f88c9c82ec&title=&width=590.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701768008573-92181c6d-dea5-4c74-968f-2ec18a765776.png#averageHue=%23f2f2f2&clientId=u65b95c61-75c3-4&from=paste&height=676&id=u46318da6&originHeight=845&originWidth=963&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=311221&status=done&style=none&taskId=u00ba0d8f-86f8-494b-a7dd-1fb789f4e8d&title=&width=770.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701768062216-4e0ffbd4-1e13-483b-b9a4-f2320afbbfb2.png#averageHue=%23f4f3f3&clientId=u65b95c61-75c3-4&from=paste&height=740&id=ua6079233&originHeight=925&originWidth=1117&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=326407&status=done&style=none&taskId=u3fd6f92b-06e4-453d-9cca-603ed9dd2f9&title=&width=893.6)
+## 添加文章分类
+### 基本功能
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702107351157-6e75092e-5cd2-49a1-8471-eb1ac4133321.png#averageHue=%23939292&clientId=u330f2e18-54dd-4&from=paste&height=642&id=ueac9e48f&originHeight=803&originWidth=1532&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=207334&status=done&style=none&taskId=u7ece9e8e-6f0b-48d4-870f-ac7cca53daa&title=&width=1225.6)
+### 接口文档
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851729282-6287535a-f114-4146-8f68-c0dd8665f28d.png#averageHue=%23fafaf9&clientId=ue975fb7d-ce5d-4&from=paste&height=619&id=u3adff7a7&originHeight=774&originWidth=1018&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=185889&status=done&style=none&taskId=u27a328fa-3867-47ec-ac80-b8e20e2fac2&title=&width=814.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851744560-b4a9a7d7-09a4-48f3-872f-ba891a66ea22.png#averageHue=%23f9f9f9&clientId=ue975fb7d-ce5d-4&from=paste&height=314&id=uf3063f0d&originHeight=393&originWidth=1031&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=109879&status=done&style=none&taskId=uc844f1e1-b8df-4995-8c0b-8d8261a6fd4&title=&width=824.8)
+### 弹窗模型
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851548799-8806493d-38e3-4a08-b781-6da4b990fc88.png#averageHue=%23919191&clientId=ue975fb7d-ce5d-4&from=paste&height=536&id=HUj25&originHeight=670&originWidth=1313&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=171583&status=done&style=none&taskId=u9b9d20a6-dc8c-4f05-a1ea-ec98a9d3d3e&title=&width=1050.4)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702107412235-6b96a408-5f08-4dd9-b6a8-c3ddc8111e4a.png#averageHue=%23f5f4f4&clientId=u330f2e18-54dd-4&from=paste&height=604&id=ufcf4d850&originHeight=755&originWidth=1041&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=365849&status=done&style=none&taskId=u24c9ddad-0aa7-48e1-94f7-e346d21433e&title=&width=832.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851599719-09ac2b27-5628-44e6-9d93-ec9af27bf9d4.png#averageHue=%23fcfbfb&clientId=ue975fb7d-ce5d-4&from=paste&height=155&id=u2e52a7cf&originHeight=194&originWidth=815&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=77042&status=done&style=none&taskId=u6d4ea84a-d708-4d76-851e-735171bdd1c&title=&width=652)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851618155-19185377-94ac-4cdb-b3bc-4ba6e84e5616.png#averageHue=%23fbfbfa&clientId=ue975fb7d-ce5d-4&from=paste&height=334&id=u4a546398&originHeight=417&originWidth=756&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=120763&status=done&style=none&taskId=ub84ddf43-2884-4c2e-93fb-7a42387cf85&title=&width=604.8)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851647425-e9d1fb46-e373-4ea7-a1fa-24523d3c42d7.png#averageHue=%23f4ece5&clientId=ue975fb7d-ce5d-4&from=paste&height=338&id=ub37157c1&originHeight=423&originWidth=1041&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=227675&status=done&style=none&taskId=u20753e86-91ff-45e1-8433-b0ef20f7e5f&title=&width=832.8)
+添加函数
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851794698-76f1d12e-7139-494e-babf-142b843538a9.png#averageHue=%23eaeae9&clientId=ue975fb7d-ce5d-4&from=paste&height=346&id=uc0976293&originHeight=433&originWidth=972&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=212513&status=done&style=none&taskId=uc96207e2-82bf-4048-856b-0566f07f283&title=&width=777.6)
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1701851854877-a3058614-ac3c-4336-9b97-84f5836c6edc.png#averageHue=%23f9f9f8&clientId=ue975fb7d-ce5d-4&from=paste&height=240&id=u91920772&originHeight=300&originWidth=774&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=118740&status=done&style=none&taskId=u4d2fe405-bf77-4dd7-a4b1-0507d90f8d9&title=&width=619.2)
+
+## 编辑分类
+
+
+## 删除分类
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702991067821-5d8e0afa-bf35-48fb-8cfa-b45f54f5fb44.png#averageHue=%238a8a8a&clientId=u8663d35a-2c39-4&from=paste&height=548&id=u9d6667eb&originHeight=685&originWidth=1304&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=180468&status=done&style=none&taskId=uee2fcfec-7974-46c1-9c26-66781761e3a&title=&width=1043.2)
+
+### 删除按钮
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702991108536-b7dc6a1e-967d-435b-b72f-6870929485c6.png#averageHue=%23f8f4ec&clientId=u8663d35a-2c39-4&from=paste&height=92&id=ue6b8479d&originHeight=115&originWidth=1013&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=83998&status=done&style=none&taskId=uc57a977b-1a80-4df3-ae92-cc0b07644f8&title=&width=810.4)
+### 确认消息弹出框
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702991215243-8f9e7639-525a-4342-876f-b42f27d6920d.png#averageHue=%23fafaf9&clientId=u8663d35a-2c39-4&from=paste&height=523&id=u1276b028&originHeight=654&originWidth=566&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=140620&status=done&style=none&taskId=u96ff9bce-fbfb-4027-bb09-a9dcb745615&title=&width=452.8)
+### 添加删除接口
+article.js
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702991293658-12f2445d-3d54-446b-ad99-bbe4c404814a.png#averageHue=%23fbfbfa&clientId=u8663d35a-2c39-4&from=paste&height=123&id=u4c15fccf&originHeight=154&originWidth=716&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=45828&status=done&style=none&taskId=ud49560ad-4980-40f1-aa98-fd626923928&title=&width=572.8)
+### 调用接口
+![image.png](https://cdn.nlark.com/yuque/0/2023/png/40625813/1702991372123-72234af5-eddd-46c9-8056-2e4d5f7d9849.png#averageHue=%23fbfbfa&clientId=u8663d35a-2c39-4&from=paste&height=222&id=u3d63a91a&originHeight=278&originWidth=745&originalType=binary&ratio=1.25&rotation=0&showTitle=false&size=68482&status=done&style=none&taskId=uf8f818ca-e213-4f44-b068-0f941d58807&title=&width=596)
+

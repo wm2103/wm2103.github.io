@@ -1,0 +1,18 @@
+---
+import Profile from './Profile.astro';
+import Icon from './Icon.astro';
+import { allNotes } from '../lib/notes';
+const notes = await allNotes();
+const tags = new Map<string, number>();
+notes.forEach(n => n.data.tags.forEach(t => tags.set(t, (tags.get(t) || 0) + 1)));
+const sortedTags = [...tags].sort((a, b) => b[1]-a[1]).slice(0, 12);
+---
+<aside class="sidebar" aria-label="作者与内容索引">
+  <Profile/>
+  <section class="side-card card"><div class="side-heading"><h2><Icon name="tag"/>兴趣与探索</h2><span>按主题阅读</span></div>
+    <div class="tag-cloud">{sortedTags.map(([tag,count]) => <a href={'/notes/?tag=' + encodeURIComponent(tag)}>{tag}<sup>{count}</sup></a>)}</div>
+  </section>
+  <section class="side-card card"><div class="side-heading"><h2><Icon name="book"/>一起走过的路径</h2></div><a class="archive-link" href="/series/sky-takeout/"><div><strong>苍穹外卖</strong><p>Java 项目学习笔记</p></div><span>{notes.filter(n => n.data.series).length.toString().padStart(2, '0')}</span></a></section>
+  <section class="side-card card now"><div class="side-heading"><h2><Icon name="cup"/>最近在折腾</h2></div><p>整理过去的笔记，继续做新的尝试。<br/>从这里，开始下一段记录。</p><small>一步一步来，也很好。</small></section>
+  <div class="side-bottom">灵感来自 <a href="https://blog.zhheo.com/" target="_blank" rel="noopener noreferrer">Heo</a> 与 <a href="https://blog.anheyu.com/" target="_blank" rel="noopener noreferrer">安知鱼 / 安和鱼</a><br/><a href="/rss.xml">通过 RSS 订阅新笔记 ↗</a></div>
+</aside>

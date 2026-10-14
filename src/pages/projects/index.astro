@@ -1,0 +1,10 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Icon from '../../components/Icon.astro';
+---
+<Base title="我的项目" description="onlylo 的个人项目与实践记录。">
+<section class="page-heading"><div><p class="eyebrow">把想法，变成可以触碰的东西</p><h1>我的项目<span>01</span></h1><p>记录做过的尝试，以及它们如何一步步成形。</p></div><Icon name="grid"/></section>
+<ProjectCard/>
+<section class="project-detail card" id="onlylo-blog"><div class="project-detail-main"><span class="eyebrow">PERSONAL WEBSITE</span><h2>onlylo 个人博客</h2><p class="article-lede">给学习笔记和项目实践，一个长期生长的地方。</p><h3>为什么重新做这个小站</h3><p>旧博客存放了神经网络和 Vue + Spring Boot 的学习记录。随着新的项目笔记积累，希望能更方便地浏览分类、按系列阅读，也给自己的作品留出位置。</p><h3>现在可以做什么</h3><ul><li>从首页、分类或标签进入完整笔记。</li><li>用全文搜索找到某个概念或代码片段。</li><li>沿着苍穹外卖系列，按学习顺序继续阅读。</li><li>在电脑或手机上使用文章目录、代码复制与深浅色主题。</li></ul><h3>从旧博客到现在</h3><p>保留 Markdown 写作，用 Astro 生成静态页面，继续适配 GitHub Pages。页面视觉参考 Heo、安知鱼 / 安和鱼的图文卡片布局，再结合自己的笔记和项目内容组织。</p></div><aside class="project-facts"><h3>项目档案</h3><dl><dt>类型</dt><dd>个人网站</dd><dt>状态</dt><dd>持续更新</dd><dt>技术</dt><dd>Astro / TypeScript<br/>Markdown / CSS</dd><dt>内容</dt><dd>学习笔记 · 项目展示</dd></dl><a class="primary-link" href="https://github.com/wm2103" target="_blank" rel="noopener noreferrer">我的 GitHub <Icon name="arrow"/></a></aside></section>
+</Base>

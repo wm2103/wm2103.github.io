@@ -1,0 +1,16 @@
+---
+import NoteCover from './NoteCover.astro';
+import { noteUrl, dateLabel, categoryNames, type Note } from '../lib/notes';
+interface Props { note: Note; }
+const { note } = Astro.props;
+---
+<article class="post card" data-category={note.data.category} data-tags={JSON.stringify(note.data.tags)}>
+  <a class="post-open" href={noteUrl(note)}>
+    <NoteCover cover={note.data.cover} day={note.data.seriesOrder}/>
+    <div class="post-body">
+      <div class="post-type"><span>{categoryNames[note.data.category]}</span><span>·</span><span>{note.data.series ? '苍穹外卖系列' : '学习记录'}</span></div>
+      <h3>{note.data.title}</h3><p class="post-description">{note.data.description}</p>
+      <div class="post-footer"><div class="post-tags">{note.data.tags.slice(0, 2).map(tag => <span>{tag}</span>)}</div><span>{dateLabel(note)}</span></div>
+    </div>
+  </a>
+</article>

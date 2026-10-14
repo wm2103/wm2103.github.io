@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import PostCard from '../../components/PostCard.astro';
+import FilterBar from '../../components/FilterBar.astro';
+import Icon from '../../components/Icon.astro';
+import { allNotes } from '../../lib/notes';
+const notes = await allNotes();
+const tags = [...new Set(notes.flatMap(n => n.data.tags))];
+---
+<Base title="学习笔记" description="记录开发、深度学习与项目实践。按分类、标签或全文搜索找到需要的知识。">
+<section class="page-heading"><div><p class="eyebrow">积累，让知识慢慢生长</p><h1>学习笔记<span>{notes.length}</span></h1><p>记下思路、踩过的坑，也记下每次弄懂的瞬间。</p></div><button class="search-cta" data-search><Icon name="search"/>搜索全文 <kbd>⌘ K</kbd></button></section>
+<div class="content-layout"><div class="main-column">
+  <div class="list-tags">{tags.map(tag => <a href={'?tag=' + encodeURIComponent(tag)}>{tag}</a>)}</div>
+  <FilterBar count={notes.length}/><div class="post-grid">{notes.map(note => <PostCard note={note}/>)}</div><div class="filter-empty card" id="filter-empty" hidden><p>暂时没有符合条件的笔记。</p><a href="/notes/">查看全部笔记 →</a></div>
+</div><Sidebar/></div>
+</Base>

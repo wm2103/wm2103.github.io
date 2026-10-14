@@ -1,0 +1,33 @@
+---
+import Header from '../components/Header.astro';
+import Icons from '../components/Icons.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import Icon from '../components/Icon.astro';
+import '../styles/base.css';
+import '../styles/site.css';
+interface Props { title?: string; description?: string; article?: boolean; noindex?: boolean; }
+const { title, description = 'onlylo 的个人空间，记录学习笔记，展示项目实践。only live once。', article = false, noindex = false } = Astro.props;
+const pageTitle = title ? title + ' · onlylo' : 'onlylo · 记录所学，创造所想';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="color-scheme" content="light dark"/>
+  <title>{pageTitle}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/>
+  <meta property="og:title" content={pageTitle}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:type" content={article ? 'article' : 'website'}/><meta property="og:locale" content="zh_CN"/>
+  {noindex && <meta name="robots" content="noindex"/>}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="alternate" type="application/rss+xml" title="onlylo 笔记" href="/rss.xml"/>
+  <script is:inline>try { const t = localStorage.getItem('onlylo-theme'); if(t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}</script>
+</head>
+<body id="top">
+  <a class="skip" href="#main">跳到内容</a><Icons/>
+  <div class="wrap"><Header/><main id="main"><slot/></main>
+    <footer class="site-footer"><div><span class="footer-brand">onlylo.</span>把学到的留下，把想到的实现。</div><div class="footer-right"><a href="/rss.xml">RSS 订阅</a><a href="/about/">关于小站</a><a href="#top">回到顶部 ↑</a></div></footer>
+  </div>
+  <a class="to-top" href="#top" aria-label="回到顶部"><Icon name="up"/></a>
+  <SearchDialog/>
+  <script>import '../scripts/site';</script>
+</body>
+</html>

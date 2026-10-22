@@ -1,5 +1,6 @@
 ---
 import Profile from './Profile.astro';
+import StatsCard from './StatsCard.astro';
 import Icon from './Icon.astro';
 import { allNotes } from '../lib/notes';
 const notes = await allNotes();
@@ -9,6 +10,7 @@ const sortedTags = [...tags].sort((a, b) => b[1]-a[1]).slice(0, 12);
 ---
 <aside class="sidebar" aria-label="作者与内容索引">
   <Profile/>
+  <StatsCard/>
   <section class="side-card card"><div class="side-heading"><h2><Icon name="tag"/>兴趣与探索</h2><span>按主题阅读</span></div>
     <div class="tag-cloud">{sortedTags.map(([tag,count]) => <a href={'/notes/?tag=' + encodeURIComponent(tag)}>{tag}<sup>{count}</sup></a>)}</div>
   </section>

@@ -4,6 +4,8 @@ dist/
 .astro/
 .tools/
 .deploy_git/
+.superpowers/
+themes/butterfly/
 public/
 db.json
 .env

@@ -122,6 +122,8 @@ npm run test:site
 
 本地可将 `.env.example` 复制为 `.env` 并填写 `UMAMI_WEBSITE_ID`；不要提交 `.env`。部署工作流已经内置当前 Umami 网站的公开 Website ID；如果以后更换统计网站，可以在 GitHub 仓库 Settings → Secrets and variables → Actions → Variables 中新增同名变量 `UMAMI_WEBSITE_ID`，它会覆盖工作流中的默认值。Website ID 会出现在网页源代码中，不是密码或 API 密钥。未配置 ID 时站点不会加载统计脚本。数据从启用后开始累计，不会补算接入前的历史访问。
 
+首页侧栏“站点访问”卡片通过 Umami 的公开 Share URL 嵌入只读统计概览。到 Umami Cloud 的网站设置 → Share URL → Add Share URL 创建分享链接，再将完整 `https://cloud.umami.is/share/...` 地址设为 GitHub Actions 的 repository variable `UMAMI_SHARE_URL`。这个链接会向所有访客公开所选统计视图；不要分享包含不想公开的数据的面板。没有设置时，首页显示配置提示。Umami 的 iframe 嵌入说明见[公开 Dashboard](https://docs.umami.is/docs/guides/create-a-public-dashboard)。
+
 Umami 脚本只在 `site` 配置的正式域名工作，忽略 URL 查询参数并尊重浏览器的 Do Not Track 信号。分类筛选只改变查询参数；博客关闭脚本自动追踪，并在每次文档加载时手动记录一次页面浏览，避免筛选操作被重复计数。
 
 ## GitHub Pages 发布

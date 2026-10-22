@@ -1,0 +1,38 @@
+---
+import Icon from './Icon.astro';
+
+const configuredShareUrl = import.meta.env.UMAMI_SHARE_URL?.trim();
+let shareUrl = '';
+
+if (configuredShareUrl) {
+  try {
+    const parsed = new URL(configuredShareUrl);
+    if (parsed.protocol === 'https:' && parsed.hostname === 'cloud.umami.is' && parsed.pathname.startsWith('/share/')) {
+      shareUrl = parsed.toString();
+    }
+  } catch {
+    // An invalid optional URL leaves the card in its setup state.
+  }
+}
+---
+
+<section class="side-card card stats-card" aria-labelledby="stats-title">
+  <div class="side-heading">
+    <h2 id="stats-title"><Icon name="chart"/>站点访问</h2>
+    <span>公开数据</span>
+  </div>
+  {shareUrl ? (
+    <>
+      <div class="stats-frame">
+        <iframe src={shareUrl} loading="lazy" title="onlylo 博客公开访问统计" referrerpolicy="no-referrer"></iframe>
+      </div>
+      <a class="stats-link" href={shareUrl} target="_blank" rel="noopener noreferrer">在 Umami 查看完整数据 <Icon name="arrow"/></a>
+    </>
+  ) : (
+    <div class="stats-empty">
+      <p>公开统计面板还没有配置。</p>
+      <small>创建 Umami Share URL 后，填入 GitHub Actions Variables 的 <code>UMAMI_SHARE_URL</code>。</small>
+      <a href="https://cloud.umami.is/" target="_blank" rel="noopener noreferrer">打开 Umami Cloud <Icon name="arrow"/></a>
+    </div>
+  )}
+</section>

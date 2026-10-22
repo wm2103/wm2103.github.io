@@ -30,6 +30,14 @@ Umami 官方文档：[添加网站](https://docs.umami.is/docs/add-a-website)、
 
 每次向 `main` 推送时，GitHub Actions 会使用变量或默认 ID 构建站点并发布。若在本地预览，也可以在项目根目录 `.env` 中设置同名变量；`.env` 已加入 Git 忽略规则，不要提交实际配置文件。没有 ID 时不会生成 Umami 脚本，普通构建仍可正常完成。
 
+## 在博客首页展示访问数据
+
+如果希望访客直接在博客看到访问概览，需要另外创建 Umami 的公开 Share URL。进入 Umami Cloud 对应网站的设置，找到 **Share URL**，点击 **Add Share URL**，选择准备公开的视图并保存。复制生成的完整链接，例如 `https://cloud.umami.is/share/...`。公开 Share URL 是任何人都可访问的只读链接，只选择适合公开的数据视图。
+
+在 GitHub 仓库 Settings → Secrets and variables → Actions → Variables 中点击 **New repository variable**，名称填 `UMAMI_SHARE_URL`，值粘贴完整 Share URL。此变量不需要保密，但链接本身意味着访问权限，设置后会嵌入在公开博客首页。如果暂时找不到 Variables，也可以先把完整链接放入本地 `.env` 的 `UMAMI_SHARE_URL` 做预览；发布到 GitHub Pages 前仍需让 Actions 构建拿到该值。没有该值时首页会显示待配置提示，不会显示伪造的统计数字。
+
+首页使用 Umami 官方支持的 iframe 嵌入公开只读面板；Website ID 仍负责收集页面浏览，Share URL 负责让访客查看数据，两者用途不同。静态页面不持有 Umami API Key。官方步骤见[创建公开 Dashboard](https://docs.umami.is/docs/guides/create-a-public-dashboard)和[在应用中嵌入分析](https://docs.umami.is/docs/guides/embed-analytics-in-your-app)。
+
 ## 当前接入选项
 
 公共布局 `src/layouts/Base.astro` 会在存在 Website ID 时加入 Umami 脚本，因此首页、笔记、项目和关于页面都会被统计。脚本限定在 `wm2103.github.io` 域名运行，并忽略 URL 查询参数。分类筛选会通过 `history.replaceState` 修改查询参数；本项目关闭自动追踪，等脚本加载后只手动记录一次当前页面浏览，避免每次点击筛选都增加一条页面浏览。
@@ -38,6 +46,6 @@ Umami 官方文档：[添加网站](https://docs.umami.is/docs/add-a-website)、
 
 ## 查看数据和验证
 
-部署完成后访问 `https://wm2103.github.io/`，然后到 Umami Cloud 对应网站的 Dashboard 查看访问量、访客趋势、热门页面、来源和设备分布。也可以打开浏览器开发者工具的 Network 面板，确认 `cloud.umami.is/script.js` 已加载且有统计请求。
+部署完成后访问 `https://wm2103.github.io/`，首页侧栏会显示公开 Share URL 提供的访问概览；到 Umami Cloud 对应网站的 Dashboard 可查看访问量、访客趋势、热门页面、来源和设备分布。也可以打开浏览器开发者工具的 Network 面板，确认 `cloud.umami.is/script.js` 已加载且有统计请求。
 
 数据从接入并成功部署后开始累计，不会补算之前的访问。当前只记录页面浏览，没有添加搜索词、个人信息或自定义点击事件。需要继续了解跟踪选项时，可查阅 [Umami 跟踪器配置](https://docs.umami.is/docs/tracker-configuration)和[手动跟踪页面浏览](https://docs.umami.is/docs/tracker-functions#pageviews)。

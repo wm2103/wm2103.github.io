@@ -15,8 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID || 'a005020b-d794-4ef5-89e8-a346e766a752' }}
+      UMAMI_SHARE_URL: ${{ vars.UMAMI_SHARE_URL || '' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: false
       - uses: actions/setup-node@v4
         with:
           node-version: '24'

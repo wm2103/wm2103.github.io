@@ -5,6 +5,7 @@ import { join, resolve, relative, sep } from 'node:path';
 import { NOTE_CATALOG } from '../../scripts/note-catalog.mjs';
 const root=resolve('dist');
 const configuredUmamiWebsiteId=process.env.UMAMI_WEBSITE_ID?.trim();
+const configuredUmamiShareUrl=process.env.UMAMI_SHARE_URL?.trim();
 async function html(path){return readFile(join(root,path,'index.html'),'utf8');}
 async function filesUnder(dir, extension) {
   const files=[];
@@ -35,6 +36,17 @@ test('Umami tracking is emitted only for a configured production website',async(
     assert.ok(tracker.includes('data-auto-track="false"'));
     assert.ok(tracker.includes('onload="window.umami?.track()"'));
   }
+});
+test('homepage embeds only a configured Umami Cloud share URL',async()=>{
+  const source=await html('');
+  if(!configuredUmamiShareUrl){
+    assert.ok(source.includes('公开统计面板还没有配置。'));
+    assert.ok(!source.includes('class="stats-frame"'));
+    return;
+  }
+  assert.ok(source.includes('class="stats-frame"'));
+  assert.ok(source.includes(`<iframe src="${configuredUmamiShareUrl}"`));
+  assert.ok(source.includes('在 Umami 查看完整数据'));
 });
 test('published note files match the search index; drafts stay private',async()=>{
   const expected=[];

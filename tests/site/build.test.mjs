@@ -4,6 +4,7 @@ import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, resolve, relative, sep } from 'node:path';
 import { NOTE_CATALOG } from '../../scripts/note-catalog.mjs';
 const root=resolve('dist');
+const configuredUmamiWebsiteId=process.env.UMAMI_WEBSITE_ID?.trim();
 async function html(path){return readFile(join(root,path,'index.html'),'utf8');}
 async function filesUnder(dir, extension) {
   const files=[];
@@ -15,6 +16,26 @@ async function filesUnder(dir, extension) {
   return files;
 }
 async function index(){return JSON.parse(await readFile(join(root,'search-index.json'),'utf8'));}
+test('Umami tracking is emitted only for a configured production website',async()=>{
+  const pages=[await html(''),await html('notes/umami-cloud-analytics')];
+  for(const source of pages){
+    const tracker=source.match(/<script\b[^>]*src="https:\/\/cloud\.umami\.is\/script\.js"[^>]*>/)?.[0];
+    if(!tracker){
+      if(configuredUmamiWebsiteId) assert.fail('configured Umami tracker is missing');
+      continue;
+    }
+    const websiteId=tracker.match(/data-website-id="([^"]+)"/)?.[1];
+    assert.ok(websiteId?.trim());
+    if(configuredUmamiWebsiteId){
+      assert.equal(websiteId,configuredUmamiWebsiteId);
+    }
+    assert.ok(tracker.includes('data-domains="wm2103.github.io"'));
+    assert.ok(tracker.includes('data-exclude-search="true"'));
+    assert.ok(tracker.includes('data-do-not-track="true"'));
+    assert.ok(tracker.includes('data-auto-track="false"'));
+    assert.ok(tracker.includes('onload="window.umami?.track()"'));
+  }
+});
 test('published note files match the search index; drafts stay private',async()=>{
   const expected=[];
   const directory=resolve('src/content/notes');

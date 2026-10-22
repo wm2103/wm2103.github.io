@@ -9,6 +9,8 @@ interface Props { title?: string; description?: string; article?: boolean; noind
 const { title, description = 'onlylo 的个人空间，记录学习笔记，展示项目实践。only live once。', article = false, noindex = false } = Astro.props;
 const pageTitle = title ? title + ' · onlylo' : 'onlylo · 记录所学，创造所想';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const umamiWebsiteId = import.meta.env.UMAMI_WEBSITE_ID?.trim();
+const analyticsDomain = Astro.site?.hostname;
 ---
 <!doctype html>
 <html lang="zh-CN" data-theme="light">
@@ -19,6 +21,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   {noindex && <meta name="robots" content="noindex"/>}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
   <link rel="alternate" type="application/rss+xml" title="onlylo 笔记" href="/rss.xml"/>
+  {umamiWebsiteId && analyticsDomain && <script is:inline defer src="https://cloud.umami.is/script.js" data-website-id={umamiWebsiteId} data-domains={analyticsDomain} data-exclude-search="true" data-do-not-track="true" data-auto-track="false" onload="window.umami?.track()"></script>}
   <script is:inline>try { const t = localStorage.getItem('onlylo-theme'); if(t === 'dark' || t === 'light') document.documentElement.dataset.theme = t; } catch {}</script>
 </head>
 <body id="top">

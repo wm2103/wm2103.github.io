@@ -1,3 +1,6 @@
+---
+import { categories } from '../lib/categories';
+---
 <section class="showcase" aria-label="欢迎与精选">
 <div class="intro-stack">
 <div class="intro card">
@@ -9,8 +12,7 @@
 </div><span class="motto">ONLY LIVE ONCE.</span>
 </div>
 <div class="categories" aria-label="探索分类">
-<a class="category blue" href="/notes/?category=web"><strong>开发笔记</strong><span>从代码到实践</span><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg></a>
-<a class="category coral" href="/notes/?category=ai"><strong>深度学习</strong><span>探索智能的原理</span><svg class="icon" aria-hidden="true"><use href="#i-network"/></svg></a>
+{categories.map(category => <a class={'category ' + category.tone} href={'/notes/?category=' + category.slug}><strong>{category.label}</strong><span>{category.description}</span><svg class="icon" aria-hidden="true"><use href={'#i-' + category.icon}/></svg></a>)}
 <a class="category green" href="/projects/"><strong>我的项目</strong><span>把想法变成作品</span><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></a>
 </div>
 </div>

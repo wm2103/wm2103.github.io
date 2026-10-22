@@ -1,8 +1,9 @@
 ---
 interface Props { count: number; }
 const { count } = Astro.props;
+import { categories } from '../lib/categories';
 ---
 <div class="filter-bar card" role="group" aria-label="按分类筛选笔记">
-<button class="filter" data-filter="all" aria-pressed="true">全部笔记<span>{count.toString().padStart(2,'0')}</span></button><button class="filter" data-filter="web" aria-pressed="false">开发笔记</button><button class="filter" data-filter="ai" aria-pressed="false">深度学习</button><span class="filter-count" id="filter-count" aria-live="polite">共 {count} 篇</span>
+<button class="filter" data-filter="all" aria-pressed="true">全部笔记<span>{count.toString().padStart(2,'0')}</span></button>{categories.map(category => <button class="filter" data-filter={category.slug} aria-pressed="false">{category.label}</button>)}<span class="filter-count" id="filter-count" aria-live="polite">共 {count} 篇</span>
 </div>
 <div class="active-tag" id="active-tag" hidden><span></span><button id="clear-tag">清除标签 ×</button></div>

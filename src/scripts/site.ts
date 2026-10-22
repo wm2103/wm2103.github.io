@@ -20,7 +20,9 @@ const filters = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]'
 const cards = [...document.querySelectorAll<HTMLElement>('[data-category]')];
 if (filters.length) {
   const params = new URLSearchParams(location.search);
-  let category = ['all','web','ai'].includes(params.get('category') || '') ? params.get('category')! : 'all';
+  const validCategories = new Set(filters.map(button => button.dataset.filter).filter(Boolean));
+  const requestedCategory = params.get('category') || '';
+  let category = validCategories.has(requestedCategory) ? requestedCategory : 'all';
   let tag = params.get('tag') || '';
   function applyFilter(updateUrl = false) {
     let count = 0;

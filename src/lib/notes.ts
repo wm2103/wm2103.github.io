@@ -1,7 +1,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { plainText } from './search.mjs';
+export { categories, categoryDefinitions, categoryNames, categorySlugs } from './categories';
 export type Note = CollectionEntry<'notes'>;
-export const categoryNames = { web: '开发笔记', ai: '深度学习' } as const;
 export const noteUrl = (note: Note) => '/notes/' + note.id + '/';
 export const formatDate = (date?: Date) => date?.toISOString().slice(0, 10) || '';
 export function dateLabel(note: Note) {

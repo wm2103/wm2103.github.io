@@ -35,7 +35,7 @@ npm run preview
 
 ## 写一篇新笔记
 
-在 src/content/notes/ 新建英文固定文件名，例如 redis-locks.md。文件名决定地址 /notes/redis-locks/，发布后尽量不改。
+在 `src/content/notes/` 新建 Markdown 文件，例如 `redis-locks.md`。文件名会决定地址 `/notes/redis-locks/`，文章发布后尽量不要改名；否则链接和搜索索引里的地址也会变化。
 
 ~~~yaml
 ---
@@ -45,17 +45,51 @@ category: web
 tags:
   - Redis
   - Java
-cover: sky
+cover: web
 date: 2026-10-14
 draft: false
 ---
 ~~~
 
-然后正常写 Markdown。category 可选 web（开发笔记）、ai（深度学习）；cover 可选 web、neural、sky。只有加入苍穹外卖系列的文章才添加 series: sky-takeout 和唯一的 seriesOrder。不确定原始日期时省略 date，用 importedAt 表示整理日期；不要用文件修改时间冒充发布日期。
+字段说明：
 
-draft: true 的文章不会生成页面、索引或订阅项。目录从一到三级标题自动生成。代码请写成带语言的围栏，Java 泛型等不要裸写在普通段落中。
+- `title`、`description`、`category` 是必填项。分类目前可填 `web`（开发笔记）或 `ai`（深度学习）。
+- `tags` 是可选标签列表；同名标签会自动出现在笔记页筛选区，不需要额外配置。
+- `cover` 可选 `web`、`neural`、`sky`，省略时默认 `web`。
+- `date` 填原始发布日期，格式为 `YYYY-MM-DD`。不确定原始日期时省略它，可用 `importedAt` 记录整理日期；不要用文件修改时间冒充发布日期。
+- `draft: true` 会让文章暂不生成页面、搜索索引、RSS 项和 sitemap 地址；准备发布时改为 `false` 或删除该字段。
+- 苍穹外卖系列文章使用 `series: sky-takeout`，并为每篇设置唯一的正整数 `seriesOrder`。
+- `sourceLabel` 可标注课程、书籍或其他原始资料来源。
 
-新增图片放 static/images/，在 Markdown 中写 ![说明](/images/example.png)。文章名与截图应有明确用途，避免随机远程封面。
+随后正常写 Markdown。目录从一到三级标题自动生成；代码使用带语言名称的围栏，例如 `~~~java`。新增图片放在 `static/images/`，在正文中写 `![说明](/images/example.png)`。文章和图片使用能看懂用途的名称，避免依赖随机远程封面。
+
+本博客直接发布 `src/content/notes/` 中的 Markdown。`docs/notes/` 是原始整理材料，不会自动发布。`npm run import:notes` 仅用于重新生成迁移清单中的旧笔记副本；新写的笔记不要加入该导入流程。
+
+## 笔记分类如何工作
+
+文章 frontmatter 的 `category` 保存稳定的分类标识，例如 `web`；页面展示的中文名、首页分类入口和分类筛选配置集中在 `src/lib/categories.ts`。其中 `categorySlugs` 会供 `src/content.config.ts` 的 Zod schema 校验文章分类；拼错或未定义的分类会在构建时被拒绝。
+
+构建时，`allNotes()` 读取笔记集合并排除草稿。`PostCard.astro` 把分类标识写入卡片的 `data-category`，同时用分类配置显示中文名。`FilterBar.astro` 根据配置生成分类按钮，首页 `Hero.astro` 根据同一份配置生成分类入口。浏览器脚本 `src/scripts/site.ts` 读取按钮和卡片上的 `data-*` 属性，按分类显示文章，并处理 `/notes/?category=web` 这样的筛选地址。文章页的面包屑、文章分类标签和 `search-index.json` 也使用分类中文名映射。
+
+要新增分类，例如“读书笔记”，在 `src/lib/categories.ts` 的 `categoryDefinitions` 中增加一个唯一 slug 和对应的中文名、描述、色调及图标。schema、首页入口、笔记筛选、文章展示和搜索数据会自动读取新配置；选择已有的 `blue`、`coral` 或 `green` 色调，以及 `src/components/Icons.astro` 中已定义的图标名。若要在“关于”页面单独介绍这个分类，再编辑 `src/pages/about/index.astro`。标签与分类不同：标签只需写在文章的 `tags` 中，不需要修改配置。
+
+## 本地预览与发布
+
+本地预览：
+
+~~~powershell
+npm run dev
+~~~
+
+检查笔记 schema 和页面构建：
+
+~~~powershell
+npm run check
+npm run build
+npm run test:site
+~~~
+
+确认后提交并推送到 `main`，GitHub Actions 会自动验证、构建并部署到 `https://wm2103.github.io/`。新文章的地址可在本地预览检查后再发布。
 
 ## 本次笔记整理
 
@@ -82,13 +116,21 @@ draft: true 的文章不会生成页面、索引或订阅项。目录从一到�
 - 旧地址：src/pages/[...legacy].astro，兼容两篇旧文及归档、分类、标签入口。
 - RSS / sitemap / robots / 搜索索引：src/pages/ 对应端点。
 
+## 浏览统计
+
+浏览数据由 Umami Cloud 保存并在其 Dashboard 中查看，不保存在 GitHub Pages 仓库。注册 Umami Cloud 后添加网站，域名填 `wm2103.github.io`，复制 Website ID。官方操作步骤见[添加网站](https://docs.umami.is/docs/add-a-website)和[收集数据](https://docs.umami.is/docs/collect-data)；本博客接入过程已记录在 [`umami-cloud-analytics`](src/content/notes/umami-cloud-analytics.md)。
+
+本地可将 `.env.example` 复制为 `.env` 并填写 `UMAMI_WEBSITE_ID`；不要提交 `.env`。部署工作流已经内置当前 Umami 网站的公开 Website ID；如果以后更换统计网站，可以在 GitHub 仓库 Settings → Secrets and variables → Actions → Variables 中新增同名变量 `UMAMI_WEBSITE_ID`，它会覆盖工作流中的默认值。Website ID 会出现在网页源代码中，不是密码或 API 密钥。未配置 ID 时站点不会加载统计脚本。数据从启用后开始累计，不会补算接入前的历史访问。
+
+Umami 脚本只在 `site` 配置的正式域名工作，忽略 URL 查询参数并尊重浏览器的 Do Not Track 信号。分类筛选只改变查询参数；博客关闭脚本自动追踪，并在每次文档加载时手动记录一次页面浏览，避免筛选操作被重复计数。
+
 ## GitHub Pages 发布
 
 当前配置针对已有的用户站仓库 wm2103/wm2103.github.io，根路径 /。不适用于 project-name 子目录站点；若另建项目仓库，需先统一调整 base 和全站路径。
 
 .github/workflows/deploy.yml 会在 main 推送时验证、构建并发布 dist/，PR 只验证构建不发布。首次启用需在 GitHub 仓库 Settings → Pages → Build and deployment 中选择 GitHub Actions。
 
-**当前本地目录没有源码 Git 仓库，旧 .deploy_git 只有生成站点的部署历史。** 本轮没有初始化远程源码分支、推送或执行上线。首次发布前应先把当前源码纳入对应仓库的源码分支，再启用上述工作流，确认旧仓库已有内容后再整合，避免覆盖历史。
+当前源码仓库的 `main` 分支连接到 `wm2103/wm2103.github.io`。向 `main` 推送会触发上述 GitHub Actions 工作流；首次使用 GitHub Pages 时，在仓库 Settings → Pages → Build and deployment 中选择 GitHub Actions。
 
 不要上传 node_modules、dist、.tools、原始含配置凭据的 docs/notes 或旧部署缓存。仅 dist/ 会成为公开站点；CI 不会发布 docs、原始笔记或预览目录。
 

@@ -13,6 +13,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      UMAMI_WEBSITE_ID: ${{ vars.UMAMI_WEBSITE_ID || 'a005020b-d794-4ef5-89e8-a346e766a752' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

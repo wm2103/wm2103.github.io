@@ -40,6 +40,42 @@ test('cleans known export font wrappers inside inline code but preserves intenti
   assert.equal(result.cleanedTags, 4);
 });
 
+test('cleans LangChain export font tags split across inline-code boundaries', () => {
+  const source = [
+    '参数 `<font style="color:rgb(3, 7, 16);">string</font>` 使用文档导出的字体样式。',
+    '通过 ` </font>`init_chat_model`<font style="color:rgb(3, 7, 16);"> ` 创建模型。',
+    '保留示例 `<font color="red">html</font>`。',
+  ].join('\n');
+
+  const result = transformNote(source);
+
+  assert.ok(result.body.includes('`string`'));
+  assert.ok(result.body.includes('`init_chat_model`'));
+  assert.ok(!result.body.includes('font style='));
+  assert.ok(result.body.includes('`<font color="red">html</font>`'));
+});
+
+test('cleans plain Yuque export font wrappers inside inline code', () => {
+  const source = '项目目录中的 `<font style="color:rgb(15, 17, 21);">.venv</font>` 可直接复用。';
+  const result = transformNote(source);
+  assert.equal(result.body, '项目目录中的 `.venv` 可直接复用。\n');
+});
+
+test('externalizes configured root-relative documentation links but leaves code examples alone', () => {
+  const source = [
+    '[Guide](/oss/python/page.md#intro) and <a href="/oss/python/reference">reference</a>.',
+    'Inline example: `[local](/unchanged)`.',
+    '```markdown', '[code](/unchanged-too)', '```',
+  ].join('\n');
+
+  const result = transformNote(source, { externalLinkBase: 'https://docs.example.com' });
+
+  assert.ok(result.body.includes('[Guide](https://docs.example.com/oss/python/page.md#intro)'));
+  assert.ok(result.body.includes('href="https://docs.example.com/oss/python/reference"'));
+  assert.ok(result.body.includes('`[local](/unchanged)`'));
+  assert.ok(result.body.includes('[code](/unchanged-too)'));
+});
+
 test('adds a Java fence only to a catalog-reviewed malformed code excerpt', () => {
   const expectedLines = [
     '> @ExceptionHandler(DuplicateKeyException.class)', '>',
@@ -156,17 +192,59 @@ test('replaces literal cloud credentials in imported code without changing refer
   }
 });
 
-test('catalog has exactly the eight original notes, real dates and six existing series days', () => {
+test('replaces payment account credentials, local key paths, and project database passwords', () => {
+  const appId = 'wx' + 'a'.repeat(16);
+  const appSecret = 'b'.repeat(32);
+  const merchantId = '1561414331';
+  const serial = 'C'.repeat(40);
+  const apiV3Key = 'd'.repeat(32);
+  const privateKeyPath = 'D:\\apiclient_key.pem';
+  const certificatePath = 'D:\\wechatpay_' + 'E'.repeat(40) + '.pem';
+  const source = [
+    '---', 'title: test', '---', '```yaml',
+    `appid: ${appId}`, `secret: ${appSecret}`, `mchid: ${merchantId}`,
+    `mchSerialNo: ${serial}`, `privateKeyFilePath: ${privateKeyPath}`,
+    `apiV3Key: ${apiV3Key}`, `weChatPayCertFilePath: ${certificatePath}`,
+    'password: dili123', 'MYSQL_ROOT_PASSWORD: dili123', 'MYSQL_PASSWORD: dili123', '```',
+  ].join('\n');
+
+  const result = transformNote(source);
+
+  for (const [key, variable] of [
+    ['appid', 'WECHAT_APP_ID'], ['secret', 'WECHAT_APP_SECRET'],
+    ['mchid', 'WECHAT_MERCHANT_ID'], ['mchSerialNo', 'WECHAT_MERCHANT_SERIAL_NO'],
+    ['privateKeyFilePath', 'WECHAT_MERCHANT_PRIVATE_KEY_PATH'],
+    ['apiV3Key', 'WECHAT_PAY_API_V3_KEY'], ['weChatPayCertFilePath', 'WECHAT_PAY_CERTIFICATE_PATH'],
+    ['password', 'MYSQL_PASSWORD'], ['MYSQL_ROOT_PASSWORD', 'MYSQL_ROOT_PASSWORD'],
+    ['MYSQL_PASSWORD', 'MYSQL_PASSWORD'],
+  ]) assert.ok(result.body.includes(`${key}: \${${variable}}`));
+  for (const value of [appId, appSecret, merchantId, serial, privateKeyPath, apiV3Key, certificatePath, 'dili123']) {
+    assert.ok(!JSON.stringify(result).includes(value), 'neither content nor report may expose a configured credential');
+  }
+});
+
+test('catalog includes all original and new notes with truthful dates and series ordering', () => {
   assert.deepEqual(NOTE_CATALOG.map(({ slug }) => slug), [
     'vue-spring-boot', 'neural-network', 'sky-takeout-day01', 'sky-takeout-day02',
     'sky-takeout-day03', 'sky-takeout-day05', 'sky-takeout-day06', 'sky-takeout-day07',
+    'sky-takeout-day08', 'sky-takeout-day10', 'shopkeeper-agent-overview',
+    'shopkeeper-agent-chapter01', 'shopkeeper-agent-chapter03', 'shopkeeper-agent-chapter04',
+    'shopkeeper-agent-chapter05', 'shopkeeper-agent-chapter06', 'langchain-models',
   ]);
   const series = NOTE_CATALOG.filter(({ metadata }) => metadata.series === 'sky-takeout');
-  assert.deepEqual(series.map(({ metadata }) => metadata.seriesOrder), [1, 2, 3, 5, 6, 7]);
-  assert.ok(series.every(({ metadata }) => metadata.date === undefined && metadata.importedAt === '2026-10-14'));
+  assert.deepEqual(series.map(({ metadata }) => metadata.seriesOrder), [1, 2, 3, 5, 6, 7, 8, 10]);
+  assert.ok(series.every(({ metadata }) => metadata.date === undefined));
+  assert.ok(series.slice(0, 6).every(({ metadata }) => metadata.importedAt === '2026-10-14'));
+  assert.ok(series.slice(6).every(({ metadata }) => metadata.importedAt === '2026-10-24'));
+  const newNotes = NOTE_CATALOG.slice(8);
+  assert.ok(newNotes.every(({ metadata }) => metadata.date === undefined && metadata.importedAt === '2026-10-24'));
+  assert.ok(newNotes.every(({ metadata }) => /学习|课程|官方文档/.test(metadata.sourceLabel)));
+  assert.ok(NOTE_CATALOG.filter(({ slug }) => slug.startsWith('shopkeeper-agent-')).every(({ metadata }) => metadata.tags.includes('电商问数')));
+  assert.ok(NOTE_CATALOG.filter(({ slug }) => ['langchain-models', 'shopkeeper-agent-overview'].includes(slug) || slug.startsWith('shopkeeper-agent-chapter')).every(({ metadata }) => metadata.category === 'ai'));
+  assert.ok(series.every(({ metadata }) => metadata.category === 'web'));
   assert.equal(NOTE_CATALOG[0].metadata.date, '2024-04-27');
   assert.equal(NOTE_CATALOG[1].metadata.date, '2024-04-10');
-  assert.ok(NOTE_CATALOG.every(({ metadata }) => /学习|课程/.test(metadata.sourceLabel)));
+  assert.ok(NOTE_CATALOG.every(({ metadata }) => /学习|课程|官方文档/.test(metadata.sourceLabel)));
 });
 
 test('repeatable imports retain all body content and source bytes without overwriting future posts', async (t) => {

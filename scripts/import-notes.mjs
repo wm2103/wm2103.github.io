@@ -15,6 +15,14 @@ const credentialRules = [
   { key: 'access-key-secret', value: '[A-Za-z0-9+/=]{24,}', type: '阿里云 AccessKey Secret', env: 'ALIYUN_ACCESS_KEY_SECRET' },
   { key: 'appid', value: 'wx[a-fA-F0-9]{16}', type: '微信小程序 AppID（应用标识）', env: 'WECHAT_APP_ID' },
   { key: 'secret', value: '[a-fA-F0-9]{32}', type: '微信小程序 AppSecret', env: 'WECHAT_APP_SECRET' },
+  { key: 'mchid', value: '\\d{6,}', type: '微信支付商户号', env: 'WECHAT_MERCHANT_ID' },
+  { key: 'mchSerialNo', value: '[a-fA-F0-9]{20,}', type: '微信支付商户证书序列号', env: 'WECHAT_MERCHANT_SERIAL_NO' },
+  { key: 'privateKeyFilePath', value: '[^\\s]+', type: '微信支付商户私钥路径', env: 'WECHAT_MERCHANT_PRIVATE_KEY_PATH' },
+  { key: 'apiV3Key', value: '[A-Za-z0-9+/=_-]{16,}', type: '微信支付 APIv3 密钥', env: 'WECHAT_PAY_API_V3_KEY' },
+  { key: 'weChatPayCertFilePath', value: '[^\\s]+', type: '微信支付证书路径', env: 'WECHAT_PAY_CERTIFICATE_PATH' },
+  { key: 'MYSQL_ROOT_PASSWORD', value: 'dili123', type: '本地 MySQL root 示例密码', env: 'MYSQL_ROOT_PASSWORD' },
+  { key: 'MYSQL_PASSWORD', value: 'dili123', type: '本地 MySQL 示例密码', env: 'MYSQL_PASSWORD' },
+  { key: 'password', value: 'dili123', type: '本地数据库示例密码', env: 'MYSQL_PASSWORD' },
 ];
 
 /** Normalize one complete note, retaining source line numbers for the report. */
@@ -23,6 +31,7 @@ export function transformNote(source, {
   missingAssetDescriptions = {},
   codeBlockRepairs = [],
   imageIndentationRepairs = [],
+  externalLinkBase,
 } = {}) {
   const normalized = source.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
   const frontmatter = normalized.match(/^---\n[\s\S]*?\n---(?:\n|$)/);
@@ -73,7 +82,8 @@ export function transformNote(source, {
       indentationRepairs.push({ line: lineNumber, reason: imageRepair.reason });
     }
 
-    // Inline code is also learning content: do not strip example HTML from it.
+    // Inline code is also learning content: only strip tags from recognized documentation exports.
+    const hasKnownExportFont = /<font\s+style=(['"])\s*color:\s*rgb\((?:3,\s*7,\s*16|15,\s*17,\s*21)\)/i.test(line);
     const inlineCode = [];
     line = line.replace(/(`+)([\s\S]*?)\1(?!`)/g, (match) => {
       // Yuque exported these exact two colors around ordinary code tokens.
@@ -82,9 +92,20 @@ export function transformNote(source, {
         cleanedTags += 2;
         return content;
       });
-      inlineCode.push(cleaned);
+      if (hasKnownExportFont) {
+        const exportTags = cleaned.match(/<font\s+style=(['"])\s*color:\s*rgb\((?:3,\s*7,\s*16|15,\s*17,\s*21)\)[^>]*>|<\/font>/gi) || [];
+        cleanedTags += exportTags.length;
+        inlineCode.push(cleaned.replace(/<font\s+style=(['"])\s*color:\s*rgb\((?:3,\s*7,\s*16|15,\s*17,\s*21)\)[^>]*>|<\/font>/gi, ''));
+      } else {
+        inlineCode.push(cleaned);
+      }
       return `\u0000CODE${inlineCode.length - 1}\u0000`;
     });
+    if (externalLinkBase) {
+      const linkBase = externalLinkBase.replace(/\/+$/, '');
+      line = line.replace(/(\]\()\/(?!\/)([^)\s]+)/g, `$1${linkBase}/$2`);
+      line = line.replace(/(\bhref\s*=\s*['"])\/(?!\/)/gi, `$1${linkBase}/`);
+    }
     line = line.replace(/<\/?(?:font|span)\b[^>]*>/gi, () => {
       cleanedTags += 1;
       return '';
@@ -157,7 +178,7 @@ function renderReport(notes) {
   const text = [
     '# 学习笔记迁移记录',
     '',
-    '首次整理日期：2026-10-14。此文件由 `node scripts/import-notes.mjs` 生成，可重复生成。',
+    '每篇笔记的整理日期记录在 frontmatter 的 `importedAt` 字段中。此文件由 `node scripts/import-notes.mjs` 生成，可重复生成。',
     '',
     `已导入 ${notes.length} 篇完整笔记，原文共 ${notes.reduce((sum, note) => sum + note.sourceBytes, 0).toLocaleString('en-US')} 字节，保留 ${notes.reduce((sum, note) => sum + note.codeBlocks, 0)} 个围栏代码块。`,
     `清理导出字体/跨度标签及内联样式 ${notes.reduce((sum, note) => sum + note.cleanedTags, 0)} 处，包括行内代码中可识别的语雀导出字体包装；有意书写的 HTML 示例与原有围栏代码保留。没有删去学习批注、未完成标记、来源链接或参考资料。`,
@@ -169,9 +190,9 @@ function renderReport(notes) {
     '| --- | --- | ---: | ---: | ---: |',
     ...notes.map((note) => `| [${note.title}](../src/content/notes/${note.slug}.md) | ${note.source} | ${note.sourceLines} | ${note.externalImages.length} | ${note.missingAssets.length} |`),
     '',
-    '苍穹外卖系列按现有 Day 01、02、03、05、06、07 排序。Day 05 原文说明 Day 04 没有独立讲义，未创建缺失章节。',
-    '两篇旧文章保留已有日期：Vue + Spring Boot 为 2024-04-27，神经网络为 2024-04-10；六篇课程笔记只记录整理日期，没有推测发布日期。',
-    '来源标签明确为课程学习笔记或学习摘录。神经网络笔记保留正文与文末原文链接，课程截图、示例代码和个人追问均未改写为原创成果。',
+    '苍穹外卖系列按现有 Day 01、02、03、05、06、07、08、10 排序。Day 04 和 Day 09 没有独立笔记，保留原有缺号。',
+    '两篇旧文章保留已有日期：Vue + Spring Boot 为 2024-04-27，神经网络为 2024-04-10；其他课程、项目与官方文档学习笔记只记录整理日期，没有推测发布日期。',
+    '来源标签明确为课程学习笔记、项目学习笔记或官方文档学习笔记。原文、个人批注、课程截图、示例代码和参考链接均保留，未改写为原创成果。',
     '',
     '## 本地图片缺失',
     '',
@@ -218,7 +239,7 @@ function renderReport(notes) {
     '## 原文完整性与再次导入',
     '',
     '下列 SHA-256 在导入前后相同。导入器只更新 `scripts/note-catalog.mjs` 清单中的文章与本报告；不会清空内容目录，后续直接添加的新文章保持不变。',
-    '调整已导入文章的元数据时修改清单；调整正文时修改对应源文件并重新导入。直接修改生成的八篇文章会被下次导入覆盖。',
+    '调整已导入文章的元数据时修改清单；调整正文时修改对应源文件并重新导入。直接修改生成的导入文章会被下次导入覆盖。',
     '',
     '| 原始文件 | SHA-256 |',
     '| --- | --- |',
@@ -238,6 +259,7 @@ export async function importNotes({ rootDir = projectRoot, catalog = NOTE_CATALO
     const bytes = await readFile(sourcePath);
     const original = bytes.toString('utf8');
     const result = transformNote(original, {
+      externalLinkBase: entry.externalLinkBase,
       missingAssetDescriptions: entry.missingAssetDescriptions,
       codeBlockRepairs: entry.codeBlockRepairs,
       imageIndentationRepairs: entry.imageIndentationRepairs,

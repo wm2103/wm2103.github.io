@@ -1,7 +1,9 @@
-// This list owns only these eight imported posts. Write new posts directly in
+// This list owns the imported posts below. Write new posts directly in
 // src/content/notes; repeated imports intentionally leave them alone.
 const importedAt = '2026-10-14';
+const recentImportedAt = '2026-10-24';
 const courseSource = '黑马程序员《苍穹外卖》课程学习笔记，含个人批注与调试记录';
+const shopkeeperSource = 'shopkeeper-agent 电商问数项目学习笔记，含个人批注';
 
 export const NOTE_CATALOG = [
   {
@@ -154,6 +156,132 @@ export const NOTE_CATALOG = [
       series: 'sky-takeout',
       seriesOrder: 7,
       sourceLabel: courseSource,
+    },
+  },
+  {
+    slug: 'sky-takeout-day08',
+    source: 'docs/notes/苍穹外卖DAY08.md',
+    metadata: {
+      title: '苍穹外卖 Day 08：地址簿、下单与微信支付',
+      description: '记录用户地址簿、订单创建和微信小程序支付流程，梳理订单表、支付配置与接口调用。',
+      category: 'web',
+      tags: ['Spring Boot', '微信支付', '订单管理', '苍穹外卖'],
+      cover: 'sky',
+      importedAt: recentImportedAt,
+      series: 'sky-takeout',
+      seriesOrder: 8,
+      sourceLabel: courseSource,
+    },
+    missingAssetDescriptions: {
+      'assets/image-20221214215116451.png': '完成下单后的 orders 表记录',
+      'assets/image-20221214224409174.png': '微信支付 JSAPI 下单接口说明截图',
+    },
+  },
+  {
+    slug: 'sky-takeout-day10',
+    source: 'docs/notes/苍穹外卖DAY10.md',
+    metadata: {
+      title: '苍穹外卖 Day 10：定时任务与 WebSocket',
+      description: '学习 Spring Task 和 cron 表达式，记录订单状态定时处理、WebSocket 来单提醒与用户催单。',
+      category: 'web',
+      tags: ['Spring Task', 'WebSocket', '定时任务', '苍穹外卖'],
+      cover: 'sky',
+      importedAt: recentImportedAt,
+      series: 'sky-takeout',
+      seriesOrder: 10,
+      sourceLabel: courseSource,
+    },
+  },
+  {
+    slug: 'shopkeeper-agent-overview',
+    source: 'docs/notes/Agent项目-电商问数学习笔记.md',
+    metadata: {
+      title: '电商问数 Agent 项目导读',
+      description: '梳理 shopkeeper-agent 如何组合数据仓库、混合检索、LangGraph、NL2SQL 与 SSE，串起智能问数项目主链路。',
+      category: 'ai',
+      tags: ['电商问数', 'AI Agent', 'NL2SQL', 'LangGraph', '项目实战'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: shopkeeperSource,
+    },
+  },
+  {
+    slug: 'shopkeeper-agent-chapter01',
+    source: 'docs/notes/1 - 电商问数：项目概述与数仓基础.md',
+    metadata: {
+      title: '电商问数 01：项目概述与数仓基础',
+      description: '理解 NL2SQL 问数场景、数据仓库、事实表与维度建模，为后续元数据检索和 SQL 生成建立背景。',
+      category: 'ai',
+      tags: ['电商问数', 'AI Agent', 'NL2SQL', '数据仓库', '维度建模'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: shopkeeperSource,
+    },
+  },
+  {
+    slug: 'shopkeeper-agent-chapter03',
+    source: 'docs/notes/3 - 电商问数：开发环境与基础服务准备.md',
+    metadata: {
+      title: '电商问数 03：开发环境与基础服务',
+      description: '记录 uv、Python 环境、Docker Desktop，以及 MySQL、Qdrant、Elasticsearch 和 Embedding 等基础服务准备。',
+      category: 'ai',
+      tags: ['电商问数', 'AI Agent', 'Python', 'Docker', '开发环境'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: shopkeeperSource,
+    },
+  },
+  {
+    slug: 'shopkeeper-agent-chapter04',
+    source: 'docs/notes/4 - 电商问数：项目结构与基础服务配置管理.md',
+    metadata: {
+      title: '电商问数 04：项目结构与配置管理',
+      description: '整理后端项目目录、YAML 参数、dataclass 配置结构和 OmegaConf 加载流程。',
+      category: 'ai',
+      tags: ['电商问数', 'AI Agent', 'Python', 'YAML', 'OmegaConf'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: shopkeeperSource,
+    },
+  },
+  {
+    slug: 'shopkeeper-agent-chapter05',
+    source: 'docs/notes/5 - 电商问数：Qdrant 与 ES 快速入门与接入.md',
+    metadata: {
+      title: '电商问数 05：Qdrant 与 Elasticsearch 检索',
+      description: '对比 Qdrant 的语义向量检索与 Elasticsearch 全文检索，记录核心概念、快速入门和客户端封装。',
+      category: 'ai',
+      tags: ['电商问数', 'AI Agent', 'Qdrant', 'Elasticsearch', '混合检索'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: shopkeeperSource,
+    },
+  },
+  {
+    slug: 'shopkeeper-agent-chapter06',
+    source: 'docs/notes/6 - 电商问数：MySQL、Embedding 接入与日志管理.md',
+    metadata: {
+      title: '电商问数 06：MySQL、Embedding 与日志',
+      description: '记录 Embedding 客户端、元数据库与教学数仓的 MySQL 连接管理，以及 Loguru 和 request_id 日志链路。',
+      category: 'ai',
+      tags: ['电商问数', 'AI Agent', 'MySQL', 'Embedding', 'Loguru'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: shopkeeperSource,
+    },
+  },
+  {
+    slug: 'langchain-models',
+    source: 'docs/notes/langchain官方文档学习-模型Models.md',
+    externalLinkBase: 'https://docs.langchain.com',
+    metadata: {
+      title: 'LangChain Models：模型调用与工具使用',
+      description: '依据 LangChain Models 文档整理聊天模型初始化、调用与流式输出、工具调用、结构化输出和高级配置。',
+      category: 'ai',
+      tags: ['LangChain', '大语言模型', '模型调用', '工具调用', '官方文档'],
+      cover: 'neural',
+      importedAt: recentImportedAt,
+      sourceLabel: 'LangChain 官方文档学习笔记，含个人批注与译文整理',
     },
   },
 ];

@@ -53,7 +53,7 @@ draft: false
 
 字段说明：
 
-- `title`、`description`、`category` 是必填项。分类目前可填 `web`（开发笔记）或 `ai`（深度学习）。
+- `title`、`description`、`category` 是必填项。分类目前可填 `web`（开发笔记）或 `ai`（人工智能，含模型与智能应用）。
 - `tags` 是可选标签列表；同名标签会自动出现在笔记页筛选区，不需要额外配置。
 - `cover` 可选 `web`、`neural`、`sky`，省略时默认 `web`。
 - `date` 填原始发布日期，格式为 `YYYY-MM-DD`。不确定原始日期时省略它，可用 `importedAt` 记录整理日期；不要用文件修改时间冒充发布日期。
@@ -93,15 +93,15 @@ npm run test:site
 
 ## 本次笔记整理
 
-已导入两篇旧笔记，以及 docs/notes 中苍穹外卖 Day 01/02/03/05/06/07，共八篇。Day 04 没有独立笔记，系列保留缺号。新系列只标注整理日期。
+当前共发布 17 篇笔记：两篇旧文、苍穹外卖 Day 01/02/03/05/06/07/08/10、电商问数项目导读与第 01/03/04/05/06 章，以及 LangChain Models 学习笔记。苍穹外卖 Day 04/09 和电商问数第 02 章没有独立笔记，保留缺号；没有可靠发布日期的新整理内容只记录整理日期。
 
 - 原始输入：source/_posts/ 和 docs/notes/，均保留未修改。
 - 发布副本：src/content/notes/，是当前站点的直接内容源。
 - 导入目录清单与摘要：scripts/note-catalog.mjs。
-- 重复导入：npm run import:notes；只覆盖清单内八篇，不会清除以后新写的文章。
+- 重复导入：npm run import:notes；只覆盖清单内 17 篇，不会清除以后新写的文章。新增来源笔记时，先在 scripts/note-catalog.mjs 登记标题、分类、标签和来源，再运行导入。
 - 修改导入文章的长期内容时，优先修改对应原文，再执行导入；直接改发布副本会在下次导入时被覆盖。
 - 旧正文中的实际配置凭据已在发布副本替换成环境变量占位符；原始 docs/notes 默认被 Git 忽略，因此 CI 不执行重新导入，而直接构建已提交的发布副本。
-- 六张本地图片没有提供，文章保留明确缺图说明。754 个语雀外链图片地址仍指向原站，未声称全部离线保存；失败时显示原图链接。
+- 八张本地图片没有提供，文章保留明确缺图说明。语雀外链图片仍指向原站，可用性未逐一验证；失败时显示原图链接。
 - 详细处理位置、来源校验值与缺图清单见 docs/content-migration.md。笔记属于课程/资料整理，保留来源及原有批注。
 
 搜索索引在构建时包含完整文章的纯文本，打开搜索框后才下载。主题偏好存储在浏览器本地。Markdown 与 HTML 配图在构建时加入懒加载属性，长笔记随阅读位置加载图片。
@@ -133,6 +133,8 @@ Umami 脚本只在 `site` 配置的正式域名工作，忽略 URL 查询参数�
 .github/workflows/deploy.yml 会在 main 推送时验证、构建并发布 dist/，PR 只验证构建不发布。首次启用需在 GitHub 仓库 Settings → Pages → Build and deployment 中选择 GitHub Actions。
 
 当前源码仓库的 `main` 分支连接到 `wm2103/wm2103.github.io`。向 `main` 推送会触发上述 GitHub Actions 工作流；首次使用 GitHub Pages 时，在仓库 Settings → Pages → Build and deployment 中选择 GitHub Actions。
+
+如果 Actions 日志出现 `actions/jekyll-build-pages@v1`、`The butterfly theme could not be found` 或 `No url found for submodule path 'themes/butterfly'`，说明 Pages 仍在使用旧的“Deploy from a branch”构建器。到 Settings → Pages → Build and deployment → Source 改为 `GitHub Actions`，然后在 Actions 页面重新运行 `Build and deploy blog`；不要继续修复这条 Jekyll 日志，因为它不是当前 Astro 工作流。若切换后仍有旧的 Jekyll workflow 在运行，到 Actions 页面停用它，再手动运行 `Build and deploy blog`。
 
 不要上传 node_modules、dist、.tools、原始含配置凭据的 docs/notes 或旧部署缓存。仅 dist/ 会成为公开站点；CI 不会发布 docs、原始笔记或预览目录。
 
